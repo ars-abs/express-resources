@@ -1,5 +1,5 @@
-import generateEndpoints from './generateEndpoints';
-import normalizeConfig from './normalizeConfig';
+import generateEndpoints from './base/generateEndpoints';
+import normalizeConfig from './base/normalizeConfig';
 
 const expressSequelize = (context) =>
 	generateEndpoints({ ...context, config: normalizeConfig(context) });

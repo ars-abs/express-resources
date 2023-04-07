@@ -17,7 +17,6 @@ const config = {
 			name: 'journals',
 			repo: 'postgres',
 			schema: {
-				id: 'journals',
 				properties: {
 					amount: { title: 'Amount', type: 'number' },
 					country: {
@@ -36,7 +35,6 @@ const config = {
 			name: 'ledgers',
 			repo: 'postgres',
 			schema: {
-				id: 'ledger',
 				properties: {
 					accountType: { title: 'AccountType', type: 'string' },
 					balances: { title: 'Balances', type: 'number' },
@@ -55,8 +53,12 @@ const config = {
 		},
 	},
 	schemaExtensions: {
-		createdBy: { isRequired: true, type: 'string' },
-		deleteAt: 'date',
+		createdBy: { title: 'createdBy', type: 'string' },
+		deleteAt: {
+			format: 'date-time',
+			title: 'deleteAt',
+			type: 'string',
+		},
 	},
 };
 
