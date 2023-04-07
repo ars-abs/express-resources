@@ -1,12 +1,15 @@
-import { peek } from '@laufire/utils/debug';
+import { map } from '@laufire/utils/collection';
+import translateSchema from './translateSchema';
 
-/* Tasks */
 const generateEndpoints = () => {};
-const normalizeConfig = () => {};
+
+const normalizeConfig = ({ config: { resources, ...rest }}) => ({
+	...rest,
+	resources: map(resources, translateSchema),
+});
 
 const expressSequelize = ({ app, config }) => {
-	peek(app);
-	const normalizedConfig = normalizeConfig(config);
+	const normalizedConfig = normalizeConfig({ config });
 
 	generateEndpoints({ app: app, config: normalizedConfig });
 };
