@@ -1,7 +1,7 @@
 import generateEndpoints from './base/generateEndpoints';
 import normalizeConfig from './base/normalizeConfig';
 
-const expressSequelize = (context) =>
+const expressResources = (context) =>
 	generateEndpoints({ ...context, config: normalizeConfig(context) });
 
-export default expressSequelize;
+export default expressResources;
