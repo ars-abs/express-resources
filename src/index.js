@@ -4,4 +4,4 @@ import normalizeConfig from './base/normalizeConfig';
 const expressResources = (context) =>
 	generateEndpoints({ ...context, config: normalizeConfig(context) });
 
-export default expressResources;
+export { expressResources };

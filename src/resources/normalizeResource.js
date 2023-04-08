@@ -1,5 +1,5 @@
 import repoStandards from '../sequelize/repoStandards';
-import { convertSchema } from '../translateSchema/types';
+import { convertSchema } from 'json-schema-sequelizer/lib/types';
 
 const normalizeResource = ({ resource, repos, schemaExtensions }) => {
 	const { repo, schema, name } = resource;
