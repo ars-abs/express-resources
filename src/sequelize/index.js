@@ -1,10 +1,12 @@
 import { DataTypes } from 'sequelize';
 import operations from './operations';
-import sequelizeRepoTypes from './sequelizeRepoTypes';
 
-const sequelize = ({ name, schema, repoOptions: { type, ...rest }}) => {
-	const modal = sequelizeRepoTypes[type](rest);
-	const db = modal.define(name, { ...schema, _id: DataTypes.STRING });
+const sequelize = ({
+	repos,
+	data: { name, schema, repo: repoName },
+}) => {
+	const repo = repos[repoName];
+	const db = repo.define(name, { ...schema, _id: DataTypes.STRING });
 
 	db.sync({ alter: true });
 

@@ -9,16 +9,8 @@ const includeContextToReq = (context) => (
 };
 
 const genResourceEndpoint = async (context) => {
-	const {
-		app,
-		data: {
-			name,
-			schema,
-			repo: repoOptions,
-		},
-	} = context;
-
-	const repo = await sequelize({ name, schema, repoOptions });
+	const { app,	data: { name, ...rest }} = context;
+	const repo = await sequelize({ ...context, data: { name, ...rest }});
 
 	app.use(includeContextToReq({ ...context, repo }));
 
