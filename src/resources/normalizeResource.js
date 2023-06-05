@@ -4,13 +4,13 @@ const normalizeResource = ({ resource, schemaExtensions }) => {
 	const { schema, name } = resource;
 	const extendedSchema = {
 		...schema,
-		id: `${ name }`,
 		properties: { ...schema.properties, ...schemaExtensions },
 	};
 
 	return {
 		...resource,
-		schema: convertSchema(extendedSchema).props,
+		schema: convertSchema({ ...extendedSchema, id: `${ name }` }).props,
+		orgSchema: extendedSchema,
 	};
 };
 
