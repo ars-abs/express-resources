@@ -44,3 +44,9 @@ $ sh ./setup.sh
 ## ToDo
 
 * A list of ToDos.
+
+## Later
+* Improve indexing:
+	* Make indexes configurable at field level.
+	* Combine indexing with searches.
+	* Infer indexes from validation copy.
