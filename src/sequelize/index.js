@@ -3,10 +3,12 @@ import operations from './operations';
 
 const sequelize = ({
 	repos,
-	data: { name, schema, repo: repoName },
+	data: { name, indexes, schema, repo: repoName },
 }) => {
 	const repo = repos[repoName];
-	const db = repo.define(name, { ...schema, _id: DataTypes.STRING });
+	const db = repo.define(
+		name, { ...schema, _id: DataTypes.STRING }, { indexes }
+	);
 
 	db.sync({ alter: true });
 
