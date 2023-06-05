@@ -9,6 +9,7 @@ specifiers:
   '@laufire/utils': 3.0.0-0
   acorn: ^6.3.0
   ajv: ^8.12.0
+  ajv-formats: ^2.1.1
   babel-core: ^7.0.0-bridge.0
   babel-eslint: ^10.0.3
   babel-jest: ^24.9.0
@@ -24,6 +25,7 @@ specifiers:
 dependencies:
   '@laufire/utils': 3.0.0-0
   ajv: 8.12.0
+  ajv-formats: 2.1.1_ajv@8.12.0
   json-schema-sequelizer: 0.25.1
   sequelize: 6.31.1
   uuid: 9.0.0
@@ -2545,6 +2547,17 @@ packages:
     engines: {node: '>=0.4.0'}
     hasBin: true
     dev: true
+
+  /ajv-formats/2.1.1_ajv@8.12.0:
+    resolution: {integrity: sha512-Wx0Kx52hxE7C18hkMEggYlEifqWZtYaRgouJor+WMdPnQyEK13vgEWyVNup7SoeeoLMsr4kf5h6dOW11I15MUA==}
+    peerDependencies:
+      ajv: ^8.0.0
+    peerDependenciesMeta:
+      ajv:
+        optional: true
+    dependencies:
+      ajv: 8.12.0
+    dev: false
 
   /ajv/6.12.6:
     resolution: {integrity: sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==}
