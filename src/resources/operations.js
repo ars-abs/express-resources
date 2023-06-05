@@ -17,8 +17,9 @@ const get = async ({ context: { repo }, params: { id }}, res) => {
 		: responses.sendNotFoundedResponse(res);
 };
 
-const getAll = async ({ context: { repo }}, res) => {
-	const data = await repo.getAll();
+const getAll = async (req, res) => {
+	const { context: { repo }} = req;
+	const data = await repo.getAll(req);
 
 	respond({
 		res: res, statusCode: 200, results: data.length, data: data,

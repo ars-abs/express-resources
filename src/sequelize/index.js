@@ -14,7 +14,7 @@ const sequelize = ({
 
 	return {
 		get: (id) => operations.get({ db, id }),
-		getAll: () => operations.getAll({ db }),
+		getAll: (req) => operations.getAll({ req, db }),
 		create: (data) => operations.create({ db, data }),
 		update: (id, data) => operations.update({ db, id, data }),
 		remove: (id) => operations.remove({ db, id }),
