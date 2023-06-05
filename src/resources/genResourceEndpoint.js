@@ -14,13 +14,13 @@ const genResourceEndpoint = async (context) => {
 	const repo = await sequelize({
 		...context, data: { name, ...rest },
 	});
-	const invalidFormat = 403;
+	const badRequest = 400;
 
 	app.use(includeContextToReq({ ...context, repo }));
 	/* eslint-disable function-paren-newline */
 	const validatorMW = (req, res, next) => (validate(orgSchema, req.body)
 		? next()
-		: res.status(invalidFormat).json({ error: 'invalid format' }));
+		: res.status(badRequest).json({ error: 'invalid format' }));
 
 	app.get(`/${ name }`, operations.getAll);
 	app.post(`/${ name }`, validatorMW, operations.create);
