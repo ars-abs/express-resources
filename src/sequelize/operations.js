@@ -1,47 +1,16 @@
 import { map } from '@laufire/utils/collection';
 import { v4 as getUUID } from 'uuid';
 import getTranslatedData from './getTranslatedData';
+import pagination from '../helpers/pagination';
 
 const get = async ({ db, id }) =>
 	map(await db.findAll({ where: { _id: id }}), getTranslatedData)[0];
 
-const getLimit = ({ limitInp, defaultLimit, maxLimit }) => {
-	const finalLimit = Number(limitInp) || defaultLimit;
-
-	// TODO: Decide produce error on 'max limit exceeded' or set max limit as limit
-	return finalLimit > maxLimit ? maxLimit : finalLimit ;
-};
-
-const getPaginationOptions = ({ req: {
-	query: { offset: offsetInp, limit: limitInp, order: orderInp },
-	context: { data: { pagination: {
-		offset: { default: defaultOffset },
-		limit: { default: defaultLimit, max: maxLimit },
-		order: { default: defaultOrder, orders },
-	}}},
-}}) => {
-	const offset = Number(offsetInp) || defaultOffset;
-	const limit = getLimit({ limitInp, defaultLimit, maxLimit });
-	const order = map(orders[orderInp || defaultOrder],
-		({ field, direction }) => [field, direction]);
-
-	return { limit, offset, order };
-};
-
-const getPaginationMeta = ({ req, data: { count, offset, limit }}) => {
-	const nextOffset = offset + limit;
-
-	return {
-		totalCount: count,
-		next: nextOffset < count ? `${ req.path }?limit=${ limit }&offset=${ nextOffset }` : null,
-	};
-};
-
 const getAll = async (context) => {
 	const { db } = context;
-	const options = getPaginationOptions(context);
+	const options = pagination.getOptions(context);
 	const { count, rows } = await db.findAndCountAll(options);
-	const meta = getPaginationMeta({ ...context, data: { ...options, count }});
+	const meta = pagination.getMeta({ ...context, data: { ...options, count }});
 	const data = map(rows, getTranslatedData);
 
 	return { meta, data } ;
