@@ -19,10 +19,10 @@ const get = async ({ context: { repo }, params: { id }}, res) => {
 
 const getAll = async (req, res) => {
 	const { context: { repo }} = req;
-	const data = await repo.getAll(req);
+	const { meta, data } = await repo.getAll(req);
 
 	respond({
-		res: res, statusCode: 200, results: data.length, data: data,
+		res: res, statusCode: 200, results: data.length, data: data, meta: meta,
 	});
 };
 

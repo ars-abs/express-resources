@@ -6,29 +6,45 @@ const get = async ({ db, id }) =>
 	map(await db.findAll({ where: { _id: id }}), getTranslatedData)[0];
 
 const getLimit = ({ limitInp, defaultLimit, maxLimit }) => {
-	const finalLimit = limitInp || defaultLimit;
+	const finalLimit = Number(limitInp) || defaultLimit;
 
-	// TODO: Decide produce error on max limit exceeded or set max limit as limit
+	// TODO: Decide produce error on 'max limit exceeded' or set max limit as limit
 	return finalLimit > maxLimit ? maxLimit : finalLimit ;
 };
 
-const getAll = async ({
-	db, req: {
-		query: { page: pageInp, limit: limitInp, order: orderInp },
-		context: { data: { pagination: {
-			page: { default: defaultPage },
-			limit: { default: defaultLimit, max: maxLimit },
-			order: { default: defaultOrder, orders },
-		}}},
-	},
-}) => {
-	const page = (pageInp || defaultPage) - 1;
+const getPaginationOptions = ({ req: {
+	query: { offset: offsetInp, limit: limitInp, order: orderInp },
+	context: { data: { pagination: {
+		offset: { default: defaultOffset },
+		limit: { default: defaultLimit, max: maxLimit },
+		order: { default: defaultOrder, orders },
+	}}},
+}}) => {
+	const offset = Number(offsetInp) || defaultOffset;
 	const limit = getLimit({ limitInp, defaultLimit, maxLimit });
-	const order = orders[orderInp || defaultOrder];
-	const offset = page * limit;
-	const options = { limit, offset, order };
+	const order = map(orders[orderInp || defaultOrder],
+		({ field, direction }) => [field, direction]);
 
-	return map(await db.findAll(options), getTranslatedData);
+	return { limit, offset, order };
+};
+
+const getPaginationMeta = ({ req, data: { count, offset, limit }}) => {
+	const nextOffset = offset + limit;
+
+	return {
+		totalCount: count,
+		next: nextOffset < count ? `${ req.path }?limit=${ limit }&offset=${ nextOffset }` : null,
+	};
+};
+
+const getAll = async (context) => {
+	const { db } = context;
+	const options = getPaginationOptions(context);
+	const { count, rows } = await db.findAndCountAll(options);
+	const meta = getPaginationMeta({ ...context, data: { ...options, count }});
+	const data = map(rows, getTranslatedData);
+
+	return { meta, data } ;
 };
 
 const create = async ({ db, data }) =>
@@ -51,3 +67,6 @@ const operations = {
 };
 
 export default operations;
+
+// https://www.linkedin.com/voyager/api/feed/updatesV2?commentsCount=0&count=9&likesCount=0&moduleKey=home-feed:desktop&paginationToken=871942344-1686189285855-7b42a23216cfb2ee67231bed4e6dda45&q=feed&sortOrder=RELEVANCE&start=10
+// https://www.linkedin.com/voyager/api/feed/updatesV2?commentsCount=0&count=9&likesCount=0&moduleKey=home-feed:desktop&paginationToken=871942344-1686189285855-7b42a23216cfb2ee67231bed4e6dda45&q=feed&sortOrder=RELEVANCE&start=19
