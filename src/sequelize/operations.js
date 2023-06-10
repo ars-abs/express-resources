@@ -20,9 +20,13 @@ const create = async ({ db, data }) =>
 	getTranslatedData(await db.create({ ...data, _id: getUUID() }));
 
 const update = async ({ db, id, data }) => {
-	await db.update(data, { where: { _id: id }});
-	return map(await db
-		.findAll({ where: { _id: id }}), getTranslatedData)[0];
+	const [rowsAffected, updated] = await db
+		.update(data, { where: { _id: id }, returning: true });
+
+	return {
+		rowsAffected: rowsAffected,
+		updated: map(updated, getTranslatedData)[0],
+	};
 };
 
 const remove = ({ db, id }) => db.destroy({ where: { _id: id }});
@@ -36,6 +40,3 @@ const operations = {
 };
 
 export default operations;
-
-// https://www.linkedin.com/voyager/api/feed/updatesV2?commentsCount=0&count=9&likesCount=0&moduleKey=home-feed:desktop&paginationToken=871942344-1686189285855-7b42a23216cfb2ee67231bed4e6dda45&q=feed&sortOrder=RELEVANCE&start=10
-// https://www.linkedin.com/voyager/api/feed/updatesV2?commentsCount=0&count=9&likesCount=0&moduleKey=home-feed:desktop&paginationToken=871942344-1686189285855-7b42a23216cfb2ee67231bed4e6dda45&q=feed&sortOrder=RELEVANCE&start=19

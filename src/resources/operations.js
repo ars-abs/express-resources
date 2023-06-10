@@ -35,18 +35,19 @@ const remove = async ({ params: { id }, context: { repo }}, res) => {
 };
 
 const update = async (
-	{
-		body,
-		params: { id },
-		context: { repo, data: { schema }},
-	},
+	{ body, params: { id }, context: { repo, data: { schema }}},
 	res
 ) => {
 	const data = select(body, keys(schema));
-	const target = await repo.get(id);
+	const { rowsAffected, updated } = await repo.update(id, data);
 
-	target && !equals(target, [])
-		? responses.updateAndSendResponse({ res, repo, id, data })
+	rowsAffected > 0
+		? respond({
+			res: res,
+			statusCode: 200,
+			message: 'Updated successfully',
+			data: updated,
+		})
 		: responses.sendNotFoundedResponse(res);
 };
 
