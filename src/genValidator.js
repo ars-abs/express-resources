@@ -5,10 +5,10 @@ import respond from './responses/respond';
 const ajv = new Ajv();
 
 addFormats(ajv);
-const validate = (schema) => (
+const genValidator = (schema) => (
 	req, res, next
 ) => (ajv.validate(schema, req.body)
 	? next()
 	: respond({ res: res, statusCode: 400, error: 'Invalid format' }));
 
-export default validate;
+export default genValidator;

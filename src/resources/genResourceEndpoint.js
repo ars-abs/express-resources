@@ -1,7 +1,6 @@
 import operations from './operations';
 import sequelize from '../sequelize';
-import validate from '../validate';
-
+import genValidator from '../genValidator';
 const includeContextToReq = (context) => (
 	req, res, next
 ) => {
@@ -14,7 +13,7 @@ const genResourceEndpoint = async (context) => {
 	const repo = await sequelize(context);
 
 	app.use(includeContextToReq({ ...context, repo }));
-	const validatorMW = validate(schema);
+	const validatorMW = genValidator(schema);
 
 	/* eslint-disable function-paren-newline */
 	app.get(`/${ name }`, operations.getAll);
