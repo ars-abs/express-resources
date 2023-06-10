@@ -1,7 +1,13 @@
-import generateEndpoints from './generateEndpoints';
+import { map } from '@laufire/utils/collection';
 import normalizeConfig from './normalizeConfig';
+import genResourceEndpoint from './resources/genResourceEndpoint';
 
-const expressResources = (context) =>
-	generateEndpoints({ ...context, config: normalizeConfig(context) });
+const expressResources = (context) => {
+	const normalizedContext = { ...context, config: normalizeConfig(context) };
+	const { config: { resources }} = normalizedContext;
+
+	map(resources, (resource) =>
+		genResourceEndpoint({ ...normalizedContext, data: { ...resource }}));
+};
 
 export { expressResources };
