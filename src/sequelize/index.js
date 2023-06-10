@@ -1,15 +1,13 @@
 import { DataTypes } from 'sequelize';
 import operations from './operations';
-import { convertSchema } from 'json-schema-sequelizer/lib/types';
 
 const sequelize = async ({
 	repos,
 	data: { name, indexes, schema, repo: repoName },
 }) => {
 	const repo = repos[repoName];
-	const sequelizeSchema = convertSchema({ ...schema, id: `${ name }` }).props;
 	const db = repo.define(
-		name, { ...sequelizeSchema, _id: DataTypes.STRING }, { indexes }
+		name, { ...schema, _id: DataTypes.STRING }, { indexes }
 	);
 
 	await db.sync({ alter: true });

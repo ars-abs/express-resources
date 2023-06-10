@@ -9,11 +9,11 @@ const includeContextToReq = (context) => (
 };
 
 const genResourceEndpoint = async (context) => {
-	const { app,	data: { name, schema }} = context;
+	const { app,	data: { name, orgSchema }} = context;
 	const repo = await sequelize(context);
 
 	app.use(includeContextToReq({ ...context, repo }));
-	const validatorMW = genValidator(schema);
+	const validatorMW = genValidator(orgSchema);
 
 	/* eslint-disable function-paren-newline */
 	app.get(`/${ name }`, operations.getAll);
