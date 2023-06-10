@@ -1,16 +1,14 @@
-import { convertSchema } from 'json-schema-sequelizer/lib/types';
-
-const normalizeResource = ({ resource, schemaExtensions }) => {
-	const { schema, name } = resource;
+const normalizeResource = ({
+	resource: { schema, ...rest }, schemaExtensions,
+}) => {
 	const extendedSchema = {
 		...schema,
 		properties: { ...schema.properties, ...schemaExtensions },
 	};
 
 	return {
-		...resource,
-		schema: convertSchema({ ...extendedSchema, id: `${ name }` }).props,
-		orgSchema: extendedSchema,
+		...rest,
+		schema: extendedSchema,
 	};
 };
 
