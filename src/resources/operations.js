@@ -1,4 +1,4 @@
-import { equals, keys, select } from '@laufire/utils/collection';
+import { keys, select } from '@laufire/utils/collection';
 import respond from '../responses/respond';
 import responses from '../responses';
 
@@ -12,24 +12,22 @@ const create = async ({ body, context: { repo, data: { schema }}}, res) => {
 const get = async ({ context: { repo }, params: { id }}, res) => {
 	const data = await repo.get(id);
 
-	data && !equals(data, [])
+	data
 		? respond({ res: res, statusCode: 200, data: data })
 		: responses.sendNotFoundedResponse(res);
 };
 
 const getAll = async (req, res) => {
 	const { context: { repo }} = req;
-	const { meta, data } = await repo.getAll(req);
+	const data = await repo.getAll(req);
 
-	respond({
-		res: res, statusCode: 200, results: data.length, data: data, meta: meta,
-	});
+	respond({ res: res, statusCode: 200, ...data });
 };
 
 const remove = async ({ params: { id }, context: { repo }}, res) => {
 	const target = await repo.get(id);
 
-	target && !equals(target, [])
+	target
 		? responses.removeAndSendResponse({ res, repo, id })
 		: responses.sendNotFoundedResponse(res);
 };
