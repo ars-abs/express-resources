@@ -1,7 +1,6 @@
 import operations from './operations';
 import sequelize from '../sequelize';
 import validate from '../validate';
-import respond from '../responses/respond';
 
 const includeContextToReq = (context) => (
 	req, res, next
@@ -9,19 +8,13 @@ const includeContextToReq = (context) => (
 	req.context = context;
 	next();
 };
-const genValidator = (schema) => (
-	req, res, next
-) => (validate(schema, req.body)
-	? next()
-	: respond({ res: res, statusCode: 400, error: 'Invalid format' })
-);
 
 const genResourceEndpoint = async (context) => {
 	const { app,	data: { name, schema }} = context;
 	const repo = await sequelize(context);
 
 	app.use(includeContextToReq({ ...context, repo }));
-	const validatorMW = genValidator(schema);
+	const validatorMW = validate(schema);
 
 	/* eslint-disable function-paren-newline */
 	app.get(`/${ name }`, operations.getAll);
