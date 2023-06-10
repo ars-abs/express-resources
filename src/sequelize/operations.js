@@ -4,7 +4,7 @@ import getTranslatedData from './getTranslatedData';
 import pagination from '../helpers/pagination';
 
 const get = async ({ db, id }) =>
-	map(await db.findAll({ where: { _id: id }}), getTranslatedData)[0];
+	getTranslatedData(await db.findOne({ where: { _id: id }}));
 
 const getAll = async (context) => {
 	const { db } = context;

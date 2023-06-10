@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import operations from './operations';
 import { convertSchema } from 'json-schema-sequelizer/lib/types';
 
-const sequelize = ({
+const sequelize = async ({
 	repos,
 	data: { name, indexes, schema, repo: repoName },
 }) => {
@@ -12,7 +12,7 @@ const sequelize = ({
 		name, { ...sequelizeSchema, _id: DataTypes.STRING }, { indexes }
 	);
 
-	db.sync({ alter: true });
+	await db.sync({ alter: true });
 
 	return {
 		get: (id) => operations.get({ db, id }),
