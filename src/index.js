@@ -1,5 +1,5 @@
-import generateEndpoints from './base/generateEndpoints';
-import normalizeConfig from './base/normalizeConfig';
+import generateEndpoints from './generateEndpoints';
+import normalizeConfig from './normalizeConfig';
 
 const expressResources = (context) =>
 	generateEndpoints({ ...context, config: normalizeConfig(context) });

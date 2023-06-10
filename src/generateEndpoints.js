@@ -1,5 +1,5 @@
 import { map } from '@laufire/utils/collection';
-import genResourceEndpoint from '../resources/genResourceEndpoint';
+import genResourceEndpoint from './resources/genResourceEndpoint';
 
 const generateEndpoints = (context) => {
 	const { config: { resources }} = context;
