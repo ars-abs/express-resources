@@ -1,4 +1,4 @@
-import { DataTypes } from 'sequelize';
+import { Sequelize, DataTypes } from 'sequelize';
 import operations from './operations';
 
 const sequelize = async ({
@@ -6,8 +6,11 @@ const sequelize = async ({
 	data: { name, indexes, schema, repo: repoName },
 }) => {
 	const repo = repos[repoName];
+	const primaryKey = { id: {
+		type: DataTypes.UUID, defaultValue: Sequelize.UUIDV4, primaryKey: true,
+	}};
 	const db = repo.define(
-		name, { ...schema, _id: DataTypes.STRING }, { indexes }
+		name, { ...primaryKey, ...schema }, { indexes }
 	);
 
 	await db.sync({ alter: true });
