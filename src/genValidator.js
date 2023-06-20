@@ -4,7 +4,14 @@ import respond from './responses/respond';
 
 const ajv = new Ajv();
 
+ajv.addFormat('ref', {
+	validate: (data) => typeof data === 'string'
+    && (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i).test(data),
+});
+ajv.addKeyword({ keyword: 'entity' });
+ajv.addKeyword({ keyword: 'props' });
 addFormats(ajv);
+
 const genValidator = (schema) => (
 	req, res, next
 ) => (ajv.validate(schema, req.body)
