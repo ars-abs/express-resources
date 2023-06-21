@@ -3,9 +3,9 @@ import sequelize from '../sequelize';
 import genValidator from '../genValidator';
 import enrichReq from './enrichReq';
 
-const genResourceEndpoint = async (context) => {
+const genResourceEndpoint = (context) => {
 	const { app,	data: { name, orgSchema }} = context;
-	const repo = await sequelize(context);
+	const repo = sequelize(context);
 
 	app.use(enrichReq({ ...context, repo }));
 	const validate = genValidator(orgSchema);

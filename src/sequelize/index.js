@@ -1,9 +1,7 @@
 import operations from './operations';
 
-const sequelize = async ({ entities, data: { name }}) => {
+const sequelize = ({ entities, data: { name }}) => {
 	const db = entities[name];
-
-	await db.sync({ alter: true });
 
 	return {
 		get: (id) => operations.get({ db, id }),
