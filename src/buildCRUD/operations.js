@@ -17,13 +17,8 @@ const getAll = async (context) => {
 const create = ({ db, data }) => db.create({ ...data, id: getUUID() });
 
 const update = async ({ db, id, data }) => {
-	const [rowsAffected, updated] = await db
-		.update(data, { where: { id }, returning: true });
-
-	return {
-		rowsAffected: rowsAffected,
-		updated: map(updated, (row) => row.dataValues)[0],
-	};
+	await db.update(data, { where: { id }});
+	return db.findOne({ where: { id }});
 };
 
 const remove = ({ db, id }) => db.destroy({ where: { id }});

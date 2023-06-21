@@ -37,9 +37,10 @@ const update = async (
 	res
 ) => {
 	const data = select(body, keys(schema));
-	const { rowsAffected, updated } = await repo.update(id, data);
+	const target = await repo.get(id);
+	const updated = await repo.update(id, data);
 
-	rowsAffected > 0
+	target && updated
 		? respond({
 			res: res,
 			statusCode: 200,
