@@ -1,16 +1,16 @@
-import normalizeConfig from './normalizeConfig';
 import genResourceEndpoint from './resources/genResourceEndpoint';
 import buildEntities from './buildEntities';
 import syncEntities from './syncEntities';
 import { mapAsync, pipe } from './helpers';
 import buildCRUD from './buildCRUD';
+import buildContext from './buildContext';
 
 const expressResources = async (context) => {
-	const normalizedContext = { ...context, config: normalizeConfig(context) };
-
 	const enrichContext = await pipe([
-		buildEntities, syncEntities, buildCRUD,
-	], normalizedContext);
+		buildEntities,
+		syncEntities,
+		buildCRUD,
+	], buildContext(context));
 
 	const { config: { resources }} = enrichContext;
 
