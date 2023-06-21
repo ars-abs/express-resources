@@ -4,12 +4,14 @@ import syncEntities from './syncEntities';
 import { mapAsync, pipe } from './helpers';
 import buildCRUD from './buildCRUD';
 import buildContext from './buildContext';
+import buildValidators from './buildValidators';
 
 const expressResources = async (context) => {
 	const enrichContext = await pipe([
 		buildEntities,
 		syncEntities,
 		buildCRUD,
+		buildValidators,
 	], buildContext(context));
 
 	const { config: { resources }} = enrichContext;

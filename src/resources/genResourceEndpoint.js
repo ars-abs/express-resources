@@ -1,13 +1,12 @@
 import operations from './operations';
-import genValidator from '../genValidator';
 import enrichReq from './enrichReq';
 
 const genResourceEndpoint = (context) => {
-	const { app, repoCRUD,	data: { name, orgSchema }} = context;
+	const { app, repoCRUD, validators, data: { name }} = context;
 	const repo = repoCRUD[name];
+	const validate = validators[name];
 
 	app.use(enrichReq({ ...context, repo }));
-	const validate = genValidator(orgSchema);
 
 	/* eslint-disable function-paren-newline */
 	app.get(`/${ name }`, operations.getAll);
