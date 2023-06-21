@@ -1,4 +1,6 @@
-import { keys, length, map, shell, values } from '@laufire/utils/collection';
+import {
+	keys, length, map, merge, shell, values,
+} from '@laufire/utils/collection';
 
 const mapAsync = async (collection, cb) => {
 	const collectionKeys = keys(collection);
@@ -38,9 +40,13 @@ const runSteps = (steps, data) => reduceSync(
 		return acc;
 	}, data
 );
+const pipe = (pipes, data) => reduceSync(
+	pipes, async (acc, c) => merge(await c(acc), acc), data,
+);
 
 export {
 	mapAsync,
 	reduceSync,
 	runSteps,
+	pipe,
 };
