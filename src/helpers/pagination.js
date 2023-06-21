@@ -7,14 +7,16 @@ const getLimit = ({ limitInp, defaultLimit, maxLimit }) => {
 	return finalLimit > maxLimit ? maxLimit : finalLimit ;
 };
 
-const getOptions = ({ req: {
-	query: { offset: offsetInp, limit: limitInp, order: orderInp },
-	context: { data: { pagination: {
+const getOptions = ({
+	req: { query: { offset: offsetInp, limit: limitInp, order: orderInp },
+		context: { config: { resources }}},
+	name,
+}) => {
+	const { pagination: {
 		offset: { default: defaultOffset },
 		limit: { default: defaultLimit, max: maxLimit },
 		order: { default: defaultOrder, orders },
-	}}},
-}}) => {
+	}} = resources[name];
 	const offset = Number(offsetInp) || defaultOffset;
 	const limit = getLimit({ limitInp, defaultLimit, maxLimit });
 	const order = map(orders[orderInp || defaultOrder],
