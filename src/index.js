@@ -1,13 +1,19 @@
 import { map, values } from '@laufire/utils/collection';
 import normalizeConfig from './normalizeConfig';
 import genResourceEndpoint from './resources/genResourceEndpoint';
+import buildEntities from './buildEntities';
 
 const expressResources = async (context) => {
 	const normalizedContext = { ...context, config: normalizeConfig(context) };
+
+	const enrichContext = {
+		...normalizedContext,
+		...buildEntities(normalizedContext),
+	};
 	const { config: { resources }} = normalizedContext;
 
 	await Promise.all(map(values(resources), (resource) =>
-		genResourceEndpoint({ ...normalizedContext, data: { ...resource }})));
+		genResourceEndpoint({ ...enrichContext, data: { ...resource }})));
 };
 
 export { expressResources };
