@@ -1,11 +1,10 @@
 import operations from './operations';
-import sequelize from '../sequelize';
 import genValidator from '../genValidator';
 import enrichReq from './enrichReq';
 
 const genResourceEndpoint = (context) => {
-	const { app,	data: { name, orgSchema }} = context;
-	const repo = sequelize(context);
+	const { app, repoCRUD,	data: { name, orgSchema }} = context;
+	const repo = repoCRUD[name];
 
 	app.use(enrichReq({ ...context, repo }));
 	const validate = genValidator(orgSchema);
