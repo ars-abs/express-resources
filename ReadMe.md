@@ -32,7 +32,7 @@ $ npm install package-name
 
 ## Notes
 
-* Some notes.
+* In entity schema we try to set custom type as 'ref' but sequelize convertSchema dependency not allow to set type as 'ref' so we conclude to set type as 'string' and format as 'ref'.
 
 # Development
 
