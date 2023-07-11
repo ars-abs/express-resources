@@ -1,30 +1,26 @@
 import { mapAsync } from './helpers';
+import { findIndex } from '@laufire/utils/collection';
+import relations from './relations';
 
-const oneToOne = ({ entities, data: { entity, prop, name }}) => {
-	const parent = entities[name];
-	const child = entities[entity];
-
-	parent.hasOne(child, { foreignKey: name, sourceKey: prop || 'id' });
-	child.belongsTo(parent);
-};
-const manyToOne = ({ entities, data: { entity, prop, name }}) => {
-	const child = entities[name];
-	const parent = entities[entity];
-
-	parent.hasMany(child, { foreignKey: name, sourceKey: prop || 'id' });
-	child.belongsTo(parent, { foreignKey: name, targetKey: prop || 'id' });
+const relationTypes = {
+	oneToOne: ({ type, format, unique }) =>
+		type === 'string' && format === 'ref' && unique,
+	manyToOne: ({ type, format }) => type === 'string' && format === 'ref',
 };
 
 const makeRelations = async (context) => {
 	const { config: { resources }} = context;
 
 	await mapAsync(resources, ({ name, orgSchema: { properties }}) => {
-		// eslint-disable-next-line complexity
-		mapAsync(properties, ({ type, format, entity, prop, unique }) => {
-			type === 'string' && format === 'ref' && unique
-			&& oneToOne({ ...context, data: { entity, prop, name }});
-			type === 'string' && format === 'ref' && unique === false
-			&& manyToOne({ ...context, data: { entity, prop, name }});
+		mapAsync(properties, ({
+			type, format, entity, prop, unique,
+		}, propName) => {
+			const relationType = findIndex(relationTypes,
+				(fn) => fn({ type, format, unique }));
+
+			relationType && relations[relationType]({
+				...context, data: { entity, prop, name, propName },
+			});
 		});
 	});
 };

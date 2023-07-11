@@ -9,6 +9,7 @@ import makeRelations from './makeRelations';
 
 const expressResources = (context) => pipe([
 	buildEntities,
+	syncEntities,
 	makeRelations,
 	syncEntities,
 	buildCRUD,
