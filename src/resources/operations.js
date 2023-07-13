@@ -2,7 +2,13 @@ import { keys, select } from '@laufire/utils/collection';
 import respond from '../responses/respond';
 import responses from '../responses';
 
-const create = async ({ body, context: { repo, data: { schema }}}, res) => {
+const create = async ({
+	body,
+	context: {
+		config: { resources }, repo, data: { name },
+	},
+}, res) => {
+	const { schema } = resources[name];
 	const sanitizedData = select(body, keys(schema));
 	const createdData = await repo.create(sanitizedData);
 
@@ -32,10 +38,11 @@ const remove = async ({ params: { id }, context: { repo }}, res) => {
 		: responses.sendNotFoundedResponse(res);
 };
 
-const update = async (
-	{ body, params: { id }, context: { repo, data: { schema }}},
-	res
+const update = async ({ body, params: { id }, context: {
+	config: { resources }, repo, data: { name },
+}}, res
 ) => {
+	const { schema } = resources[name];
 	const data = select(body, keys(schema));
 	const target = await repo.get(id);
 	const updated = await repo.update(id, data);
