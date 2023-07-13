@@ -10,6 +10,7 @@ ajv.addFormat('ref', {
 });
 ajv.addKeyword({ keyword: 'entity' });
 ajv.addKeyword({ keyword: 'prop' });
+ajv.addKeyword({ keyword: 'unique' });
 addFormats(ajv);
 
 const genValidator = (schema) => (
