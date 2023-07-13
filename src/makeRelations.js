@@ -11,18 +11,20 @@ const relationTypes = {
 const makeRelations = async (context) => {
 	const { config: { resources }} = context;
 
-	await mapAsync(resources, ({ name, orgSchema: { properties }}) => {
-		mapAsync(properties, ({
-			type, format, entity, prop, unique,
-		}, propName) => {
-			const relationType = findIndex(relationTypes,
-				(fn) => fn({ type, format, unique }));
+	await mapAsync(resources, ({ name, orgSchema: { properties }}) =>
+		mapAsync(properties, ({ entity, prop, ...rest }, propName) => {
+			const relationType = findIndex(relationTypes, (fn) => fn(rest));
 
 			relationType && relations[relationType]({
-				...context, data: { entity, prop, name, propName },
+				...context,
+				data: {
+					source: name,
+					sourceProp: propName,
+					target: entity,
+					targetProp: prop,
+				},
 			});
-		});
-	});
+		}));
 };
 
 export default makeRelations;

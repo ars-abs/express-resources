@@ -1,19 +1,30 @@
-const oneToOne = ({ entities, data: { entity, prop, name, propName }}) => {
-	const parent = entities[name];
-	const child = entities[entity];
+const oneToOne = ({ entities, data: {
+	source, sourceProp, target, targetProp,
+}}) => {
+	const peerOne = entities[target];
+	const peerTwo = entities[source];
 
-	parent.hasOne(child, { foreignKey: propName, sourceKey: prop || 'id' });
-	child.belongsTo(parent);
+	peerOne.hasOne(peerTwo, {
+		foreignKey: sourceProp, sourceKey: targetProp || 'id',
+	});
+	peerTwo.belongsTo(peerOne);
 };
-const manyToOne = ({ entities, data: { entity, prop, name, propName }}) => {
-	const child = entities[name];
-	const parent = entities[entity];
+const manyToOne = ({ entities, data: {
+	source, sourceProp, target, targetProp,
+}}) => {
+	const child = entities[source];
+	const parent = entities[target];
 
-	parent.hasMany(child, { foreignKey: propName, sourceKey: prop || 'id' });
-	child.belongsTo(parent, { foreignKey: propName, targetKey: prop || 'id' });
+	parent.hasMany(child, {
+		foreignKey: sourceProp, sourceKey: targetProp || 'id',
+	});
+	child.belongsTo(parent, {
+		foreignKey: sourceProp, targetKey: targetProp || 'id',
+	});
 };
 const relations = {
-	oneToOne, manyToOne,
+	oneToOne,
+	manyToOne,
 };
 
 export default relations;
