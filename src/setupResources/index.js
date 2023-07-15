@@ -1,4 +1,4 @@
-import { pipe } from '../../helpers';
+import { pipe } from '../helpers';
 import buildEntities from './buildEntities';
 import makeRelations from './makeRelations';
 import syncEntities from './syncEntities';
