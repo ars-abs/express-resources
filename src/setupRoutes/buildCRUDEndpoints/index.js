@@ -2,7 +2,7 @@ import operations from './operations';
 import enrichReq from './enrichReq';
 import { map } from '@laufire/utils/collection';
 
-const genResourceEndpoint = (context) => {
+const buildCRUDEndpoints = (context) => {
 	const { app, repoCRUD, validators, config: { resources }} = context;
 
 	map(resources, ({ name }) => {
@@ -20,4 +20,4 @@ const genResourceEndpoint = (context) => {
 	});
 };
 
-export default genResourceEndpoint;
+export default buildCRUDEndpoints;

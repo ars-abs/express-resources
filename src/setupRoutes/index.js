@@ -1,12 +1,12 @@
-import { pipe } from '../../helpers';
+import { pipe } from '../helpers';
 import buildCRUD from './buildCRUD';
 import buildValidators from './buildValidators';
-import genResourceEndpoint from './resources/genResourceEndpoint';
+import buildCRUDEndpoints from './buildCRUDEndpoints';
 
 const setupRoutes = (context) => pipe([
 	buildCRUD,
 	buildValidators,
-	genResourceEndpoint,
+	buildCRUDEndpoints,
 ], context);
 
 export default setupRoutes;

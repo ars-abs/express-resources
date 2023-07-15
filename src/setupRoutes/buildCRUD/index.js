@@ -1,4 +1,4 @@
-import { mapAsync } from '../../../helpers';
+import { mapAsync } from '../../helpers';
 import operations from './operations';
 
 const buildCRUD = async (context) => {
