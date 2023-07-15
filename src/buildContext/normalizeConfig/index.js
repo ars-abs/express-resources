@@ -1,5 +1,5 @@
 import { map } from '@laufire/utils/collection';
-import normalizeResource from './setup/setupRoutes/resources/normalizeResource';
+import normalizeResource from './normalizeResource';
 
 const normalizeConfig = ({ config }) => {
 	const { resources, schemaExtensions } = config;
