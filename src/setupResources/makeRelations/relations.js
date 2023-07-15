@@ -1,19 +1,19 @@
-const oneToOne = ({ entities, data: {
+const oneToOne = ({ models, data: {
 	source, sourceProp, target, targetProp,
 }}) => {
-	const peerOne = entities[target];
-	const peerTwo = entities[source];
+	const peerOne = models[target];
+	const peerTwo = models[source];
 
 	peerOne.hasOne(peerTwo, {
 		foreignKey: sourceProp, sourceKey: targetProp || 'id',
 	});
 	peerTwo.belongsTo(peerOne);
 };
-const manyToOne = ({ entities, data: {
+const manyToOne = ({ models, data: {
 	source, sourceProp, target, targetProp,
 }}) => {
-	const child = entities[source];
-	const parent = entities[target];
+	const child = models[source];
+	const parent = models[target];
 
 	parent.hasMany(child, {
 		foreignKey: sourceProp, sourceKey: targetProp || 'id',

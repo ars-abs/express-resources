@@ -1,8 +1,8 @@
 import { map } from '@laufire/utils/collection';
 import { Sequelize, DataTypes } from 'sequelize';
 
-const buildEntities = ({ repos, config: { resources }}) => ({
-	entities: map(resources, ({ name, indexes, schema, repo: repoName }) => {
+const buildModels = ({ repos, config: { resources }}) => ({
+	models: map(resources, ({ name, indexes, schema, repo: repoName }) => {
 		const repo = repos[repoName];
 		const primaryKey = { id: {
 			type: DataTypes.UUID,
@@ -16,4 +16,4 @@ const buildEntities = ({ repos, config: { resources }}) => ({
 	}),
 });
 
-export default buildEntities;
+export default buildModels;

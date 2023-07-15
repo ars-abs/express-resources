@@ -9,17 +9,17 @@ const getIncludes = ({ name, resources, models }) => {
 };
 
 const get = ({
-	db, id, name, entities, config: { resources },
+	db, id, name, models, config: { resources },
 }) => db.findOne({
 	where: { id },
-	include: getIncludes({ name, resources, models: entities }),
+	include: getIncludes({ name, resources, models }),
 });
 
 const getAll = async (context) => {
-	const { db, name, entities, config: { resources }} = context;
+	const { db, name, models, config: { resources }} = context;
 	const options = {
 		...pagination.getOptions(context),
-		include: getIncludes({ name, resources, models: entities }),
+		include: getIncludes({ name, resources, models }),
 	};
 	const { count, rows } = await db.findAndCountAll(options);
 	const meta = pagination.getMeta({ ...context, data: { ...options, count }});

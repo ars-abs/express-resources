@@ -2,10 +2,10 @@ import { mapAsync } from '../../helpers';
 import operations from './operations';
 
 const buildCRUD = async (context) => {
-	const { entities } = context;
+	const { models } = context;
 
 	return {
-		repoCRUD: await mapAsync(entities, (db, name) => ({
+		repoCRUD: await mapAsync(models, (db, name) => ({
 			get: (id) => operations.get({ ...context, db, name, id }),
 			getAll: (req) => operations.getAll({ ...context, db, name, req }),
 			create: (data) => operations.create({ ...context, db, name, data }),

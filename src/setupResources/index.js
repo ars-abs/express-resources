@@ -1,14 +1,14 @@
 import { pipe } from '../helpers';
-import buildEntities from './buildEntities';
+import buildModels from './buildModels';
 import makeRelations from './makeRelations';
-import syncEntities from './syncEntities';
+import syncModels from './syncModels';
 import buildCRUD from './buildCRUD';
 
 const setupResources = (context) => pipe([
-	buildEntities,
-	syncEntities,
+	buildModels,
+	syncModels,
 	makeRelations,
-	syncEntities,
+	syncModels,
 	buildCRUD,
 ], context);
 
