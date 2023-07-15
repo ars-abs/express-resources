@@ -1,15 +1,11 @@
-import genResourceEndpoint from './resources/genResourceEndpoint';
 import { pipe } from './helpers';
-import buildCRUD from './buildCRUD';
 import buildContext from './buildContext';
-import buildValidators from './buildValidators';
 import setupResources from './setup/setupResources';
+import setupRoutes from './setup/setupRoutes';
 
 const expressResources = (context) => pipe([
 	setupResources,
-	buildCRUD,
-	buildValidators,
-	genResourceEndpoint,
+	setupRoutes,
 ], buildContext(context));
 
 export { expressResources };

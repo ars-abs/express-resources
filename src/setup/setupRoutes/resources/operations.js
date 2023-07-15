@@ -1,6 +1,6 @@
 import { keys, select } from '@laufire/utils/collection';
-import respond from '../responses/respond';
-import responses from '../responses';
+import respond from '../../../responses/respond';
+import responses from '../../../responses';
 
 const create = async ({
 	body,

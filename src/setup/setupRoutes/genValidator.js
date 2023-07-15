@@ -1,6 +1,6 @@
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
-import respond from './responses/respond';
+import respond from '../../responses/respond';
 
 const ajv = new Ajv();
 
