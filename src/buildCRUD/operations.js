@@ -2,11 +2,25 @@ import { map } from '@laufire/utils/collection';
 import { v4 as getUUID } from 'uuid';
 import pagination from '../helpers/pagination';
 
-const get = ({ db, id }) => db.findOne({ where: { id }});
+const getIncludes = ({ name, resources, models }) => {
+	const { includes = [] } = resources[name];
+
+	return map(includes, (modelName) => models[modelName]);
+};
+
+const get = ({
+	db, id, name, entities, config: { resources },
+}) => db.findOne({
+	where: { id },
+	include: getIncludes({ name, resources, models: entities }),
+});
 
 const getAll = async (context) => {
-	const { db } = context;
-	const options = pagination.getOptions(context);
+	const { db, name, entities, config: { resources }} = context;
+	const options = {
+		...pagination.getOptions(context),
+		include: getIncludes({ name, resources, models: entities }),
+	};
 	const { count, rows } = await db.findAndCountAll(options);
 	const meta = pagination.getMeta({ ...context, data: { ...options, count }});
 	const data = map(rows, (row) => row.dataValues);
