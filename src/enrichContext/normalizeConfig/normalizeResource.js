@@ -8,13 +8,14 @@ const translateSchema = ({ properties, ...rest }) => ({
 		: props)),
 });
 
-const normalizeResource = ({ resource, schemaExtensions }) => {
-	const { schema, name } = resource;
+const normalizeResource = ({ resource, key, schemaExtensions }) => {
+	const { schema, name = key } = resource;
 	const extendedSchema = merge({ properties: schemaExtensions }, schema);
 	const translatedSchema = translateSchema(extendedSchema);
 
 	return {
 		...resource,
+		name: name,
 		repoSchema: convertSchema({ ...translatedSchema, id: `${ name }` }).props,
 		schema: extendedSchema,
 	};

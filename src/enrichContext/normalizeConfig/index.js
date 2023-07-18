@@ -6,8 +6,8 @@ const normalizeConfig = ({ config }) => {
 
 	return {
 		...config,
-		resources: map(resources, (resource) =>
-			normalizeResource({ resource, schemaExtensions })),
+		resources: map(resources, (resource, key) =>
+			normalizeResource({ resource, key, schemaExtensions })),
 	} ;
 };
 
