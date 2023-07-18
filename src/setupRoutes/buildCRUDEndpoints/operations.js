@@ -8,8 +8,8 @@ const create = async ({
 		config: { resources }, repo, data: { name },
 	},
 }, res) => {
-	const { schema } = resources[name];
-	const sanitizedData = select(body, keys(schema));
+	const { repoSchema } = resources[name];
+	const sanitizedData = select(body, keys(repoSchema));
 	const createdData = await repo.create(sanitizedData);
 
 	respond({ res: res, statusCode: 201, data: createdData });
@@ -42,8 +42,8 @@ const update = async ({ body, params: { id }, context: {
 	config: { resources }, repo, data: { name },
 }}, res
 ) => {
-	const { schema } = resources[name];
-	const data = select(body, keys(schema));
+	const { repoSchema } = resources[name];
+	const data = select(body, keys(repoSchema));
 	const target = await repo.get(id);
 	const updated = await repo.update(id, data);
 

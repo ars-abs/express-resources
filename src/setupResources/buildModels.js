@@ -2,7 +2,7 @@ import { map } from '@laufire/utils/collection';
 import { Sequelize, DataTypes } from 'sequelize';
 
 const buildModels = ({ repos, config: { resources }}) => ({
-	models: map(resources, ({ name, indexes, schema, repo: repoName }) => {
+	models: map(resources, ({ name, indexes, repoSchema, repo: repoName }) => {
 		const repo = repos[repoName];
 		const primaryKey = { id: {
 			type: DataTypes.UUID,
@@ -11,7 +11,7 @@ const buildModels = ({ repos, config: { resources }}) => ({
 		}};
 
 		return repo.define(
-			name, { ...primaryKey, ...schema }, { indexes }
+			name, { ...primaryKey, ...repoSchema }, { indexes }
 		);
 	}),
 });

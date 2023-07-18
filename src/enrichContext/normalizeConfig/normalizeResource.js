@@ -18,8 +18,8 @@ const normalizeResource = ({ resource, schemaExtensions }) => {
 
 	return {
 		...resource,
-		schema: convertSchema({ ...translatedSchema, id: `${ name }` }).props,
-		orgSchema: extendedSchema,
+		repoSchema: convertSchema({ ...translatedSchema, id: `${ name }` }).props,
+		schema: extendedSchema,
 	};
 };
 

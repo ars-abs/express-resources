@@ -11,7 +11,7 @@ const relationTypes = {
 const makeRelations = async (context) => {
 	const { config: { resources }} = context;
 
-	await mapAsync(resources, ({ name, orgSchema: { properties }}) =>
+	await mapAsync(resources, ({ name, schema: { properties }}) =>
 		mapAsync(properties, ({ entity, prop, ...rest }, propName) => {
 			const relationType = findIndex(relationTypes, (fn) => fn(rest));
 
