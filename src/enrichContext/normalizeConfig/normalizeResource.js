@@ -1,4 +1,4 @@
-import { map } from '@laufire/utils/collection';
+import { map, merge } from '@laufire/utils/collection';
 import { convertSchema } from 'json-schema-sequelizer/lib/types';
 
 const translateSchema = ({ properties, ...rest }) => ({
@@ -10,10 +10,7 @@ const translateSchema = ({ properties, ...rest }) => ({
 
 const normalizeResource = ({ resource, schemaExtensions }) => {
 	const { schema, name } = resource;
-	const extendedSchema = {
-		...schema,
-		properties: { ...schema.properties, ...schemaExtensions },
-	};
+	const extendedSchema = merge({ properties: schemaExtensions }, schema);
 	const translatedSchema = translateSchema(extendedSchema);
 
 	return {
