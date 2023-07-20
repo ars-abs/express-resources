@@ -1,5 +1,5 @@
 import { map, merge } from '@laufire/utils/collection';
-import { convertSchema } from 'json-schema-sequelizer/lib/types';
+import { convertSchema } from '../../lib/types';
 
 const translateSchema = ({ properties, ...rest }) => ({
 	...rest,
