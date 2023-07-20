@@ -27,7 +27,7 @@ const DEFINITIONS = {
 		case 'jsonb': return ['JSONB'];
 		case 'blob': return ['BLOB', definition];
 
-		case 'uuid': return ['UUIDV'];
+		case 'uuid': return ['UUID'];
 		case 'uuidv4': return ['UUIDV4'];
 		case 'uuidv1': return ['UUIDV1'];
 
