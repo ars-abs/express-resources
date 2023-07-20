@@ -11,7 +11,7 @@ const buildCRUDEndpoints = (context) => {
 
 		app.use(enrichReq({ ...context, repo: repo, data: { name }}));
 		/* eslint-disable function-paren-newline */
-		app.get(`/${ name }`, operations.getAll);
+		app.get(`/${ name }`, validate, operations.getAll);
 		app.post(`/${ name }`, validate, operations.create);
 		app.get(`/${ name }/:id`, operations.get);
 		app.put(`/${ name }/:id`, validate, operations.update);
