@@ -13,10 +13,10 @@ ajv.addKeyword({ keyword: 'prop' });
 ajv.addKeyword({ keyword: 'unique' });
 addFormats(ajv);
 
-const genValidator = (schema) => (
+const genValidateMiddleware = (schema) => (
 	req, res, next
 ) => (ajv.validate(schema, req.body)
 	? next()
 	: respond({ res: res, statusCode: 400, error: 'Invalid format' }));
 
-export default genValidator;
+export default genValidateMiddleware;
