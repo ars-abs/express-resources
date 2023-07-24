@@ -7,19 +7,22 @@ const translateSchema = ({ properties, ...rest }) => ({
 		? { ...props, format: 'uuid' }
 		: props)),
 });
+const defaultSchema = {
+	offset: { type: 'number' },
+	limit: { type: 'number' },
+	order: { type: 'string' },
+};
 const extendPagination = (pagination) => {
-	const { order, limit, offset } = pagination;
-	const { orders, ...rest } = order;
+	const { order, ...rest } = pagination;
+	const resolvedSchema = { ...defaultSchema, ...rest };
+	const orderSchema = order && order.orders
+		? { type: 'string', enum: keys(order.orders) }
+		: defaultSchema.order;
 	const querySchema = {
 		type: 'object',
 		properties: {
-			offset: offset,
-			limit: limit,
-			order: {
-				...rest,
-				type: 'string',
-				enum: keys(orders),
-			},
+			...resolvedSchema,
+			order: orderSchema,
 		},
 	};
 
@@ -27,7 +30,7 @@ const extendPagination = (pagination) => {
 };
 
 const normalizeResource = ({ resource, key, schemaExtensions }) => {
-	const { schema, name = key, pagination } = resource;
+	const { schema, name = key, pagination = {}} = resource;
 	const extendedSchema = merge({ properties: schemaExtensions }, schema);
 	const translatedSchema = translateSchema(extendedSchema);
 
