@@ -57,12 +57,10 @@ const update = async ({ body, params: { id }, context: {
 		: responses.sendNotFoundedResponse(res);
 };
 
-const operations = {
+export {
 	create,
 	get,
 	getAll,
 	update,
 	remove,
 };
-
-export default operations;

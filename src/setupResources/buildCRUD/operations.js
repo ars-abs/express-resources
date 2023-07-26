@@ -37,12 +37,10 @@ const update = async ({ db, id, data }) => {
 
 const remove = ({ db, id }) => db.destroy({ where: { id }});
 
-const operations = {
+export {
 	get,
 	getAll,
 	create,
 	update,
 	remove,
 };
-
-export default operations;
