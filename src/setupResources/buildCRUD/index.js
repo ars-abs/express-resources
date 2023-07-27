@@ -1,3 +1,4 @@
+import { merge } from '@laufire/utils/collection';
 import { mapAsync } from '../../helpers';
 import { get, getAll, create, update, remove } from './operations';
 
@@ -6,7 +7,8 @@ const buildCRUD = async (context) => {
 
 	return {
 		repoCRUD: await mapAsync(models, (db, name) => ({
-			get: (id) => get({ ...context, db, name, id }),
+			get: (extendedContext) =>
+				get(merge(extendedContext, { data: { db, name }})),
 			getAll: (req) => getAll({ ...context, db, name, req }),
 			create: (data) => create({ ...context, db, name, data }),
 			update: (id, data) => update({

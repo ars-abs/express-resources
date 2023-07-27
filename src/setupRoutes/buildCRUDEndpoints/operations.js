@@ -15,12 +15,13 @@ const create = async ({
 	respond({ res: res, statusCode: 201, data: createdData });
 };
 
-const get = async ({ context: { repo }, params: { id }}, res) => {
-	const data = await repo.get(id);
+const get = async ({ context, params: { id }}, res) => {
+	const response = await context.repo.get({ ...context, data: { id }});
+	const notFound = 404;
+	const success = 200;
 
-	data
-		? respond({ res: res, statusCode: 200, data: data })
-		: responses.sendNotFoundedResponse(res);
+	res.status(response.error ? notFound : success);
+	res.json(response);
 };
 
 const getAll = async (req, res) => {

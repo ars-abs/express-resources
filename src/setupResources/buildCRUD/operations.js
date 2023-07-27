@@ -8,12 +8,16 @@ const getIncludes = ({ name, resources, models }) => {
 	return map(includes, (modelName) => models[modelName]);
 };
 
-const get = ({
-	db, id, name, models, config: { resources },
-}) => db.findOne({
-	where: { id },
-	include: getIncludes({ name, resources, models }),
-});
+const get = async ({
+	data: { db, id, name }, models, config: { resources },
+}) => {
+	const data = await db.findOne({
+		where: { id },
+		include: getIncludes({ name, resources, models }),
+	});
+
+	return data ? { data } : { error: { message: 'ID not found.' }};
+};
 
 const getAll = async (context) => {
 	const { db, name, models, config: { resources }} = context;
