@@ -32,7 +32,15 @@ const getAll = async (context) => {
 	return { meta, data } ;
 };
 
-const create = ({ db, data }) => db.create({ ...data, id: getUUID() });
+const create = async ({ data: { db, name, sanitizedData }, validators }) => {
+	const isValid = validators[name].body(sanitizedData);
+
+	return isValid
+		? {
+			data: await db.create({ ...sanitizedData, id: getUUID() }),
+		}
+		: { error: { message: 'Invalid Data' }};
+};
 
 const update = async ({ db, id, data }) => {
 	await db.update(data, { where: { id }});

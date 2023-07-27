@@ -2,17 +2,19 @@ import { keys, select } from '@laufire/utils/collection';
 import respond from '../../helpers/responses/respond';
 import responses from '../../helpers/responses';
 
-const create = async ({
-	body,
-	context: {
-		config: { resources }, repo, data: { name },
-	},
-}, res) => {
+const create = async ({ body, context }, res) => {
+	const { config: { resources }, repo, data: { name }} = context;
 	const { repoSchema } = resources[name];
 	const sanitizedData = select(body, keys(repoSchema));
-	const createdData = await repo.create(sanitizedData);
+	const response = await repo.create({
+		...context,
+		data: { sanitizedData },
+	});
+	const notFound = 404;
+	const created = 201;
 
-	respond({ res: res, statusCode: 201, data: createdData });
+	res.status(response.error ? notFound : created);
+	res.json(response);
 };
 
 const get = async ({ context, params: { id }}, res) => {
