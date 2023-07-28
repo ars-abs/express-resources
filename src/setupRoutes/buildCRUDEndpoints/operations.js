@@ -41,23 +41,16 @@ const remove = async ({ params: { id }, context: { repo }}, res) => {
 		: responses.sendNotFoundedResponse(res);
 };
 
-const update = async ({ body, params: { id }, context: {
-	config: { resources }, repo, data: { name },
-}}, res
-) => {
+const update = async ({ body, params: { id }, context }, res) => {
+	const { config: { resources }, repo, data: { name }} = context;
 	const { repoSchema } = resources[name];
 	const data = select(body, keys(repoSchema));
-	const target = await repo.get(id);
-	const updated = await repo.update(id, data);
+	const response = await repo.update({ ...context, data: { id, data }});
+	const notFound = 404;
+	const updated = 200;
 
-	target && updated
-		? respond({
-			res: res,
-			statusCode: 200,
-			message: 'Updated successfully',
-			data: updated,
-		})
-		: responses.sendNotFoundedResponse(res);
+	res.status(response.error ? notFound : updated);
+	res.json(response);
 };
 
 export {

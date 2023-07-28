@@ -42,9 +42,15 @@ const create = async ({ data: { db, name, sanitizedData }, validators }) => {
 		: { error: { message: 'Invalid Data' }};
 };
 
-const update = async ({ db, id, data }) => {
-	await db.update(data, { where: { id }});
-	return db.findOne({ where: { id }});
+const update = async ({ data: { db, id, name, data }, validators }) => {
+	const isValid = validators[name].body(data);
+
+	return isValid
+		? {
+			data: await db.update(data, { where: { id }})
+			&& await db.findOne({ where: { id }}),
+		}
+		: { error: { message: 'Invalid data.' }};
 };
 
 const remove = ({ db, id }) => db.destroy({ where: { id }});

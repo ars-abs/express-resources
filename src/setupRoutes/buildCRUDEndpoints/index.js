@@ -14,7 +14,7 @@ const buildCRUDEndpoints = (context) => {
 		app.get(`/${ name }`, validate, getAll);
 		app.post(`/${ name }`, create);
 		app.get(`/${ name }/:id`, get);
-		app.put(`/${ name }/:id`, validate, update);
+		app.put(`/${ name }/:id`, update);
 		app.delete(`/${ name }/:id`, remove);
 		/* eslint-enable function-paren-newline */
 	});
