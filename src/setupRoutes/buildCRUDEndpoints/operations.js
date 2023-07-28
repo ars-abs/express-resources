@@ -1,6 +1,5 @@
 import { keys, select } from '@laufire/utils/collection';
 import respond from '../../helpers/responses/respond';
-import responses from '../../helpers/responses';
 
 const create = async ({ body, context }, res) => {
 	const { config: { resources }, repo, data: { name }} = context;
@@ -33,12 +32,13 @@ const getAll = async (req, res) => {
 	respond({ res: res, statusCode: 200, ...data });
 };
 
-const remove = async ({ params: { id }, context: { repo }}, res) => {
-	const target = await repo.get(id);
+const remove = async ({ params: { id }, context }, res) => {
+	const response = await context.repo.remove({ ...context, data: { id }});
+	const notFound = 404;
+	const success = 200;
 
-	target
-		? responses.removeAndSendResponse({ res, repo, id })
-		: responses.sendNotFoundedResponse(res);
+	res.status(response.error ? notFound : success);
+	res.json(response);
 };
 
 const update = async ({ body, params: { id }, context }, res) => {

@@ -53,7 +53,11 @@ const update = async ({ data: { db, id, name, data }, validators }) => {
 		: { error: { message: 'Invalid data.' }};
 };
 
-const remove = ({ db, id }) => db.destroy({ where: { id }});
+const remove = async ({ data: { db, id }}) => {
+	const isRemoved = await db.destroy({ where: { id }});
+
+	return isRemoved ? { data: { id }} : { error: { message: 'Invalid ID' }};
+} ;
 
 export {
 	get,

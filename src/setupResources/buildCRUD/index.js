@@ -14,7 +14,8 @@ const buildCRUD = async (context) => {
 				create(merge(extendedContext, { data: { db, name }})),
 			update: (extendedContext) =>
 				update(merge(extendedContext, { data: { db, name }})),
-			remove: (id) => remove({ ...context, db, name, id }),
+			remove: (extendedContext) =>
+				remove(merge(extendedContext, { data: { db, name }})),
 		})),
 	};
 };
