@@ -1,12 +1,6 @@
+import { getValidQuery } from '../../helpers';
 import respond from '../../helpers/responses/respond';
 import ajv from './setupAjv';
-const getValidQuery = (query) => (query.offset && query.limit
-	? {
-		...query,
-		offset: Number(query.offset),
-		limit: Number(query.limit),
-	}
-	: query);
 
 const genValidateMiddleware = ({ schema, pagination: { querySchema }}) => (
 	{ body, query }, res, next
