@@ -9,7 +9,8 @@ const buildCRUD = async (context) => {
 		repoCRUD: await mapAsync(models, (db, name) => ({
 			get: (extendedContext) =>
 				get(merge(extendedContext, { data: { db, name }})),
-			getAll: (req) => getAll({ ...context, db, name, req }),
+			getAll: (extendedContext) =>
+				getAll(merge(extendedContext, { data: { db, name }})),
 			create: (extendedContext) =>
 				create(merge(extendedContext, { data: { db, name }})),
 			update: (extendedContext) =>

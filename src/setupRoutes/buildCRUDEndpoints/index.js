@@ -3,15 +3,15 @@ import enrichReq from './enrichReq';
 import { map } from '@laufire/utils/collection';
 
 const buildCRUDEndpoints = (context) => {
-	const { app, repoCRUD, validators, config: { resources }} = context;
+	const { app, repoCRUD, config: { resources }} = context;
 
 	map(resources, ({ name }) => {
 		const repo = repoCRUD[name];
-		const validate = validators[name].middleware;
+		const data = { name };
 
-		app.use(enrichReq({ ...context, repo: repo, data: { name }}));
+		app.use(enrichReq({ ...context, repo, data }));
 		/* eslint-disable function-paren-newline */
-		app.get(`/${ name }`, validate, getAll);
+		app.get(`/${ name }`, getAll);
 		app.post(`/${ name }`, create);
 		app.get(`/${ name }/:id`, get);
 		app.put(`/${ name }/:id`, update);

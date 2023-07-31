@@ -1,11 +1,23 @@
-import { map } from '@laufire/utils/collection';
+import { map, merge } from '@laufire/utils/collection';
 import { v4 as getUUID } from 'uuid';
-import pagination from '../../helpers/pagination';
+import { getOptions, getMeta } from '../../helpers/pagination';
 
 const getIncludes = ({ name, resources, models }) => {
 	const { includes = [] } = resources[name];
 
 	return map(includes, (modelName) => models[modelName]);
+};
+const getData = async (context) => {
+	const { data: { name, db }, models, config: { resources }} = context;
+	const options = {
+		...getOptions(context),
+		include: getIncludes({ name, resources, models }),
+	};
+	const { count, rows } = await db.findAndCountAll(options);
+	const meta = getMeta(merge(context, { data: { ...options, count }}));
+	const data = map(rows, (row) => row.dataValues);
+
+	return { meta, data };
 };
 
 const get = async ({
@@ -19,17 +31,13 @@ const get = async ({
 	return data ? { data } : { error: { message: 'ID not found.' }};
 };
 
-const getAll = async (context) => {
-	const { db, name, models, config: { resources }} = context;
-	const options = {
-		...pagination.getOptions(context),
-		include: getIncludes({ name, resources, models }),
-	};
-	const { count, rows } = await db.findAndCountAll(options);
-	const meta = pagination.getMeta({ ...context, data: { ...options, count }});
-	const data = map(rows, (row) => row.dataValues);
+const getAll = (context) => {
+	const { data: { name, ...rest }, validators } = context;
+	const isValid = validators[name].query(rest);
 
-	return { meta, data } ;
+	return isValid
+		? getData(context)
+		: { error: { message: 'Invalid request.' }};
 };
 
 const create = async ({ data: { db, name, sanitizedData }, validators }) => {

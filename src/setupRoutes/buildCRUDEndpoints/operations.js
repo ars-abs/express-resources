@@ -1,5 +1,5 @@
 import { keys, select } from '@laufire/utils/collection';
-import respond from '../../helpers/responses/respond';
+import { getValidQuery } from '../../helpers';
 
 const create = async ({ body, context }, res) => {
 	const { config: { resources }, repo, data: { name }} = context;
@@ -25,11 +25,16 @@ const get = async ({ context, params: { id }}, res) => {
 	res.json(response);
 };
 
-const getAll = async (req, res) => {
-	const { context: { repo }} = req;
-	const data = await repo.getAll(req);
+const getAll = async ({ context, path, query }, res) => {
+	const response = await context.repo.getAll({
+		...context,
+		data: { ...getValidQuery(query), path },
+	});
+	const badRequest = 400;
+	const success = 200;
 
-	respond({ res: res, statusCode: 200, ...data });
+	res.status(response.error ? badRequest : success);
+	res.json(response);
 };
 
 const remove = async ({ params: { id }, context }, res) => {
