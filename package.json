@@ -5,7 +5,7 @@
   "main": "./index.js",
   "scripts": {
     "start": "npm run build && npm run dev",
-    "dev": "node dist/index.js",
+    "dev": "babel-node src/index.js",
     "test": "jest --no-cache",
     "build": "rm -rf ./dist && babel --ignore '**/*.spec.js' -d ./dist ./src && npm run copy",
     "prepareDist": "npm run lint && npm test && npm run build",
@@ -28,6 +28,7 @@
   "devDependencies": {
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",
+    "@babel/node": "^7.22.6",
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.5.5",
     "@babel/runtime": "^7.7.2",
