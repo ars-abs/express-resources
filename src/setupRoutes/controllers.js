@@ -1,5 +1,4 @@
 import { keys, select } from '@laufire/utils/collection';
-import { getValidQuery } from '../helpers';
 
 const create = async ({
 	body,
@@ -29,7 +28,7 @@ const get = async ({ context: { service }, params: { id }}, res) => {
 const getAll = async ({ context: { service }, path, query }, res) => {
 	const response = await service({
 		action: 'getAll',
-		data: { ...getValidQuery(query), path },
+		data: { ...query, path },
 	});
 	const badRequest = 400;
 	const success = 200;

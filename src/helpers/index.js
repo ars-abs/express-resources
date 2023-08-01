@@ -35,14 +35,6 @@ const reduceSync = async (
 	return acc;
 };
 
-const getValidQuery = (query) => (query.offset && query.limit
-	? {
-		...query,
-		offset: Number(query.offset),
-		limit: Number(query.limit),
-	}
-	: query);
-
 const runSteps = (steps, data) => reduceSync(
 	steps, (acc, step) => {
 		step(acc);
@@ -56,7 +48,6 @@ const pipe = (pipes, data) => reduceSync(
 export {
 	mapAsync,
 	reduceSync,
-	getValidQuery,
 	runSteps,
 	pipe,
 };
