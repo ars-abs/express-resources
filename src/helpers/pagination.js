@@ -1,7 +1,7 @@
 import { map } from '@laufire/utils/collection';
 
 const getOptions = ({
-	config: { resources }, data: { name, ...rest },
+	config: { resources }, data, repo: { name },
 }) => {
 	const { pagination = {}} = resources[name];
 	const { offset: offsetVal, limit: limitVal, order: orderVal } = pagination;
@@ -11,7 +11,7 @@ const getOptions = ({
 		limit: limitVal?.default,
 		order: orderVal?.default,
 	};
-	const { offset, limit, order } = { ...defaultValues, ...rest };
+	const { offset, limit, order } = { ...defaultValues, ...data };
 
 	return {
 		offset: offset,

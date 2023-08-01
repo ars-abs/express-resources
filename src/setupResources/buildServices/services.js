@@ -8,7 +8,7 @@ const getIncludes = ({ name, resources, models }) => {
 	return map(includes, (modelName) => models[modelName]);
 };
 const getData = async (context) => {
-	const { data: { name, db }, models, config: { resources }} = context;
+	const { repo: { name, db }, models, config: { resources }} = context;
 	const options = {
 		...getOptions(context),
 		include: getIncludes({ name, resources, models }),
@@ -21,7 +21,7 @@ const getData = async (context) => {
 };
 
 const get = async ({
-	data: { db, id, name }, models, config: { resources },
+	repo: { db, name }, data: { id }, models, config: { resources },
 }) => {
 	const data = await db.findOne({
 		where: { id },
@@ -32,36 +32,40 @@ const get = async ({
 };
 
 const getAll = (context) => {
-	const { data: { name, ...rest }, validators } = context;
-	const isValid = validators[name].query(rest);
+	const { data, repo: { name }, validators } = context;
+	const isValid = validators[name].query(data);
 
 	return isValid
 		? getData(context)
 		: { error: { message: 'Invalid request.' }};
 };
 
-const create = async ({ data: { db, name, sanitizedData }, validators }) => {
-	const isValid = validators[name].body(sanitizedData);
+const create = async ({
+	data: { payload }, repo: { db, name }, validators,
+}) => {
+	const isValid = validators[name].body(payload);
 
 	return isValid
 		? {
-			data: await db.create({ ...sanitizedData, id: getUUID() }),
+			data: await db.create({ ...payload, id: getUUID() }),
 		}
 		: { error: { message: 'Invalid Data' }};
 };
 
-const update = async ({ data: { db, id, name, data }, validators }) => {
-	const isValid = validators[name].body(data);
+const update = async ({
+	data: { id, payload }, repo: { db, name }, validators,
+}) => {
+	const isValid = validators[name].body(payload);
 
 	return isValid
 		? {
-			data: await db.update(data, { where: { id }})
+			data: await db.update(payload, { where: { id }})
 			&& await db.findOne({ where: { id }}),
 		}
 		: { error: { message: 'Invalid data.' }};
 };
 
-const remove = async ({ data: { db, id }}) => {
+const remove = async ({ data: { id }, repo: { db }}) => {
 	const isRemoved = await db.destroy({ where: { id }});
 
 	return isRemoved ? { data: { id }} : { error: { message: 'Invalid ID' }};

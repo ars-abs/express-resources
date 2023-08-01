@@ -7,7 +7,9 @@ const create = async ({
 }, res) => {
 	const { repoSchema } = resources[name];
 	const sanitizedData = select(body, keys(repoSchema));
-	const response = await service.create({ data: { sanitizedData }});
+	const response = await service({
+		action: 'create', data: { payload: sanitizedData },
+	});
 	const notFound = 404;
 	const created = 201;
 
@@ -16,7 +18,7 @@ const create = async ({
 };
 
 const get = async ({ context: { service }, params: { id }}, res) => {
-	const response = await service.get({ data: { id }});
+	const response = await service({ action: 'get', data: { id }});
 	const notFound = 404;
 	const success = 200;
 
@@ -25,7 +27,8 @@ const get = async ({ context: { service }, params: { id }}, res) => {
 };
 
 const getAll = async ({ context: { service }, path, query }, res) => {
-	const response = await service.getAll({
+	const response = await service({
+		action: 'getAll',
 		data: { ...getValidQuery(query), path },
 	});
 	const badRequest = 400;
@@ -36,7 +39,7 @@ const getAll = async ({ context: { service }, path, query }, res) => {
 };
 
 const remove = async ({ params: { id }, context: { service }}, res) => {
-	const response = await service.remove({ data: { id }});
+	const response = await service({ action: 'remove', data: { id }});
 	const notFound = 404;
 	const success = 200;
 
@@ -51,7 +54,10 @@ const update = async ({
 }, res) => {
 	const { repoSchema } = resources[name];
 	const data = select(body, keys(repoSchema));
-	const response = await service.update({ data: { id, data }});
+	const response = await service({
+		action: 'update',
+		data: { id: id, payload: data },
+	});
 	const notFound = 404;
 	const updated = 200;
 
