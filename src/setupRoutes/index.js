@@ -3,13 +3,13 @@ import enrichReq from './enrichReq';
 import { map } from '@laufire/utils/collection';
 
 const setupRoutes = (context) => {
-	const { app, services, config: { resources }} = context;
+	const { app, models, config: { resources }} = context;
 
 	map(resources, ({ name }) => {
-		const service = services[name];
-		const data = { name };
+		const db = models[name];
+		const repo = { name, db };
 
-		app.use(enrichReq({ ...context, service, data }));
+		app.use(enrichReq({ ...context, repo }));
 		app.get(`/${ name }`, getAll);
 		app.post(`/${ name }`, create);
 		app.get(`/${ name }/:id`, get);

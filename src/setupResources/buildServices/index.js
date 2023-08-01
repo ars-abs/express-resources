@@ -1,11 +1,9 @@
-import { mapAsync } from '../../helpers';
 import actions from './actions';
 
-const buildServices = async (context) => ({
-	services: await mapAsync(context.models, (db, name) =>
-		({ action, data }) => actions[action]({
-			...context, data: data, repo: { db, name },
-		})),
+const buildServices = (context) => ({
+	service: ({ action, data, repo }) => actions[action]({
+		...context, data, repo,
+	}),
 });
 
 export default buildServices;

@@ -1,13 +1,8 @@
-import { keys, select } from '@laufire/utils/collection';
-
-const create = async ({
-	body,
-	context: { config: { resources }, service, data: { name }},
-}, res) => {
-	const { repoSchema } = resources[name];
-	const sanitizedData = select(body, keys(repoSchema));
+const create = async ({	body, context: { service, repo }}, res) => {
 	const response = await service({
-		action: 'create', data: { payload: sanitizedData },
+		repo: repo,
+		action: 'create',
+		data: { payload: body },
 	});
 	const notFound = 404;
 	const created = 201;
@@ -16,8 +11,8 @@ const create = async ({
 	res.json(response);
 };
 
-const get = async ({ context: { service }, params: { id }}, res) => {
-	const response = await service({ action: 'get', data: { id }});
+const get = async ({ context: { service, repo }, params: { id }}, res) => {
+	const response = await service({ repo: repo, action: 'get', data: { id }});
 	const notFound = 404;
 	const success = 200;
 
@@ -25,8 +20,9 @@ const get = async ({ context: { service }, params: { id }}, res) => {
 	res.json(response);
 };
 
-const getAll = async ({ context: { service }, path, query }, res) => {
+const getAll = async ({ context: { service, repo }, path, query }, res) => {
 	const response = await service({
+		repo: repo,
 		action: 'getAll',
 		data: { ...query, path },
 	});
@@ -37,8 +33,12 @@ const getAll = async ({ context: { service }, path, query }, res) => {
 	res.json(response);
 };
 
-const remove = async ({ params: { id }, context: { service }}, res) => {
-	const response = await service({ action: 'remove', data: { id }});
+const remove = async ({ params: { id }, context: { service, repo }}, res) => {
+	const response = await service({
+		repo: repo,
+		action: 'remove',
+		data: { id },
+	});
 	const notFound = 404;
 	const success = 200;
 
@@ -49,13 +49,12 @@ const remove = async ({ params: { id }, context: { service }}, res) => {
 const update = async ({
 	body,
 	params: { id },
-	context: { config: { resources }, service, data: { name }},
+	context: { service, repo },
 }, res) => {
-	const { repoSchema } = resources[name];
-	const data = select(body, keys(repoSchema));
 	const response = await service({
+		repo: repo,
 		action: 'update',
-		data: { id: id, payload: data },
+		data: { id: id, payload: body },
 	});
 	const notFound = 404;
 	const updated = 200;
