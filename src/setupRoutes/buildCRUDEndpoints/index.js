@@ -1,4 +1,4 @@
-import { getAll, get, create, update, remove } from './operations';
+import { getAll, get, create, update, remove } from './controllers';
 import enrichReq from './enrichReq';
 import { map } from '@laufire/utils/collection';
 
