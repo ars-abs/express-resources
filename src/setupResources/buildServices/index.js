@@ -2,11 +2,11 @@ import { merge } from '@laufire/utils/collection';
 import { mapAsync } from '../../helpers';
 import { get, getAll, create, update, remove } from './operations';
 
-const buildCRUD = async (context) => {
+const buildServices = async (context) => {
 	const { models } = context;
 
 	return {
-		repoCRUD: await mapAsync(models, (db, name) => ({
+		services: await mapAsync(models, (db, name) => ({
 			get: (extendedContext) =>
 				get(merge(extendedContext, { data: { db, name }})),
 			getAll: (extendedContext) =>
@@ -21,4 +21,4 @@ const buildCRUD = async (context) => {
 	};
 };
 
-export default buildCRUD;
+export default buildServices;

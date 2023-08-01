@@ -3,10 +3,10 @@ import enrichReq from './enrichReq';
 import { map } from '@laufire/utils/collection';
 
 const buildCRUDEndpoints = (context) => {
-	const { app, repoCRUD, config: { resources }} = context;
+	const { app, services, config: { resources }} = context;
 
 	map(resources, ({ name }) => {
-		const repo = repoCRUD[name];
+		const repo = services[name];
 		const data = { name };
 
 		app.use(enrichReq({ ...context, repo, data }));

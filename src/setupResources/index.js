@@ -2,14 +2,14 @@ import { pipe } from '../helpers';
 import buildModels from './buildModels';
 import makeRelations from './makeRelations';
 import syncModels from './syncModels';
-import buildCRUD from './buildCRUD';
+import buildServices from './buildServices';
 
 const setupResources = (context) => pipe([
 	buildModels,
 	syncModels,
 	makeRelations,
 	syncModels,
-	buildCRUD,
+	buildServices,
 ], context);
 
 export default setupResources;
