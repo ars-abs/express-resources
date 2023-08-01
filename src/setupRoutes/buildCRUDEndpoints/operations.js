@@ -2,10 +2,10 @@ import { keys, select } from '@laufire/utils/collection';
 import { getValidQuery } from '../../helpers';
 
 const create = async ({ body, context }, res) => {
-	const { config: { resources }, repo, data: { name }} = context;
+	const { config: { resources }, service, data: { name }} = context;
 	const { repoSchema } = resources[name];
 	const sanitizedData = select(body, keys(repoSchema));
-	const response = await repo.create({
+	const response = await service.create({
 		...context,
 		data: { sanitizedData },
 	});
@@ -17,7 +17,7 @@ const create = async ({ body, context }, res) => {
 };
 
 const get = async ({ context, params: { id }}, res) => {
-	const response = await context.repo.get({ ...context, data: { id }});
+	const response = await context.service.get({ ...context, data: { id }});
 	const notFound = 404;
 	const success = 200;
 
@@ -26,7 +26,7 @@ const get = async ({ context, params: { id }}, res) => {
 };
 
 const getAll = async ({ context, path, query }, res) => {
-	const response = await context.repo.getAll({
+	const response = await context.service.getAll({
 		...context,
 		data: { ...getValidQuery(query), path },
 	});
@@ -38,7 +38,7 @@ const getAll = async ({ context, path, query }, res) => {
 };
 
 const remove = async ({ params: { id }, context }, res) => {
-	const response = await context.repo.remove({ ...context, data: { id }});
+	const response = await context.service.remove({ ...context, data: { id }});
 	const notFound = 404;
 	const success = 200;
 
@@ -47,10 +47,10 @@ const remove = async ({ params: { id }, context }, res) => {
 };
 
 const update = async ({ body, params: { id }, context }, res) => {
-	const { config: { resources }, repo, data: { name }} = context;
+	const { config: { resources }, service, data: { name }} = context;
 	const { repoSchema } = resources[name];
 	const data = select(body, keys(repoSchema));
-	const response = await repo.update({ ...context, data: { id, data }});
+	const response = await service.update({ ...context, data: { id, data }});
 	const notFound = 404;
 	const updated = 200;
 

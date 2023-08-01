@@ -6,10 +6,10 @@ const buildCRUDEndpoints = (context) => {
 	const { app, services, config: { resources }} = context;
 
 	map(resources, ({ name }) => {
-		const repo = services[name];
+		const service = services[name];
 		const data = { name };
 
-		app.use(enrichReq({ ...context, repo, data }));
+		app.use(enrichReq({ ...context, service, data }));
 		/* eslint-disable function-paren-newline */
 		app.get(`/${ name }`, getAll);
 		app.post(`/${ name }`, create);
