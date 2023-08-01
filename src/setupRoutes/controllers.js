@@ -1,14 +1,13 @@
 import { keys, select } from '@laufire/utils/collection';
 import { getValidQuery } from '../helpers';
 
-const create = async ({ body, context }, res) => {
-	const { config: { resources }, service, data: { name }} = context;
+const create = async ({
+	body,
+	context: { config: { resources }, service, data: { name }},
+}, res) => {
 	const { repoSchema } = resources[name];
 	const sanitizedData = select(body, keys(repoSchema));
-	const response = await service.create({
-		...context,
-		data: { sanitizedData },
-	});
+	const response = await service.create({ data: { sanitizedData }});
 	const notFound = 404;
 	const created = 201;
 
@@ -16,8 +15,8 @@ const create = async ({ body, context }, res) => {
 	res.json(response);
 };
 
-const get = async ({ context, params: { id }}, res) => {
-	const response = await context.service.get({ ...context, data: { id }});
+const get = async ({ context: { service }, params: { id }}, res) => {
+	const response = await service.get({ data: { id }});
 	const notFound = 404;
 	const success = 200;
 
@@ -25,9 +24,8 @@ const get = async ({ context, params: { id }}, res) => {
 	res.json(response);
 };
 
-const getAll = async ({ context, path, query }, res) => {
-	const response = await context.service.getAll({
-		...context,
+const getAll = async ({ context: { service }, path, query }, res) => {
+	const response = await service.getAll({
 		data: { ...getValidQuery(query), path },
 	});
 	const badRequest = 400;
@@ -37,8 +35,8 @@ const getAll = async ({ context, path, query }, res) => {
 	res.json(response);
 };
 
-const remove = async ({ params: { id }, context }, res) => {
-	const response = await context.service.remove({ ...context, data: { id }});
+const remove = async ({ params: { id }, context: { service }}, res) => {
+	const response = await service.remove({ data: { id }});
 	const notFound = 404;
 	const success = 200;
 
@@ -46,11 +44,14 @@ const remove = async ({ params: { id }, context }, res) => {
 	res.json(response);
 };
 
-const update = async ({ body, params: { id }, context }, res) => {
-	const { config: { resources }, service, data: { name }} = context;
+const update = async ({
+	body,
+	params: { id },
+	context: { config: { resources }, service, data: { name }},
+}, res) => {
 	const { repoSchema } = resources[name];
 	const data = select(body, keys(repoSchema));
-	const response = await service.update({ ...context, data: { id, data }});
+	const response = await service.update({ data: { id, data }});
 	const notFound = 404;
 	const updated = 200;
 
