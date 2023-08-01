@@ -1,6 +1,6 @@
 import { merge } from '@laufire/utils/collection';
 import { mapAsync } from '../../helpers';
-import { get, getAll, create, update, remove } from './operations';
+import { get, getAll, create, update, remove } from './services';
 
 const buildServices = async (context) => {
 	const { models } = context;
