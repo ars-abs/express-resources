@@ -1,5 +1,5 @@
 import { keys, select } from '@laufire/utils/collection';
-import { getValidQuery } from '../../helpers';
+import { getValidQuery } from '../helpers';
 
 const create = async ({ body, context }, res) => {
 	const { config: { resources }, service, data: { name }} = context;
