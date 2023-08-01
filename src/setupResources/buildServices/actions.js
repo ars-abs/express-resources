@@ -7,6 +7,7 @@ const getIncludes = ({ name, resources, models }) => {
 
 	return map(includes, (modelName) => models[modelName]);
 };
+
 const getData = async (context) => {
 	const { repo: { name, db }, models, config: { resources }} = context;
 	const options = {
