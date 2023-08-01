@@ -67,7 +67,7 @@ const remove = async ({ data: { db, id }}) => {
 	return isRemoved ? { data: { id }} : { error: { message: 'Invalid ID' }};
 } ;
 
-export {
+export default {
 	get,
 	getAll,
 	create,
