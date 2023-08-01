@@ -10,13 +10,11 @@ const buildCRUDEndpoints = (context) => {
 		const data = { name };
 
 		app.use(enrichReq({ ...context, service, data }));
-		/* eslint-disable function-paren-newline */
 		app.get(`/${ name }`, getAll);
 		app.post(`/${ name }`, create);
 		app.get(`/${ name }/:id`, get);
 		app.put(`/${ name }/:id`, update);
 		app.delete(`/${ name }/:id`, remove);
-		/* eslint-enable function-paren-newline */
 	});
 };
 
