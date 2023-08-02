@@ -1,6 +1,6 @@
-import { map, merge } from '@laufire/utils/collection';
+import { map } from '@laufire/utils/collection';
 import { v4 as getUUID } from 'uuid';
-import { getOptions, getMeta } from '../../helpers/pagination';
+import { getOptions } from '../../helpers/pagination';
 
 const getIncludes = ({ name, resources, models }) => {
 	const { includes = [] } = resources[name];
@@ -15,7 +15,9 @@ const getData = async (context) => {
 		include: getIncludes({ name, resources, models }),
 	};
 	const { count, rows } = await db.findAndCountAll(options);
-	const meta = getMeta(merge(context, { data: { ...options, count }}));
+	const { limit, offset } = options;
+	const nextOffset = limit + offset;
+	const meta = { limit: limit, offset: nextOffset, totalCount: count };
 	const data = map(rows, (row) => row.dataValues);
 
 	return { meta, data };
@@ -33,8 +35,8 @@ const get = async ({
 };
 
 const getAll = (context) => {
-	const { data, repo: { name }, validators } = context;
-	const isValid = validators[name].query(data);
+	const { meta, repo: { name }, validators } = context;
+	const isValid = validators[name].query(meta);
 
 	return isValid
 		? getData(context)
@@ -70,7 +72,7 @@ const remove = async ({ data: { id }, repo: { db }}) => {
 	const isRemoved = await db.destroy({ where: { id }});
 
 	return isRemoved ? { data: { id }} : { error: { message: 'Invalid ID' }};
-} ;
+};
 
 export default {
 	get,

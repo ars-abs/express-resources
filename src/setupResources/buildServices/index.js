@@ -1,9 +1,8 @@
 import actions from './actions';
 
 const buildServices = (context) => ({
-	service: ({ action, data, repo }) => actions[action]({
-		...context, data, repo,
-	}),
+	service: ({ action, ...props }) =>
+		actions[action]({ ...context, ...props }),
 });
 
 export default buildServices;

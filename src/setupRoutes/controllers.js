@@ -1,3 +1,5 @@
+import { getMeta } from '../helpers/pagination';
+
 const create = async ({	body, context: { service, repo }}, res) => {
 	const response = await service({
 		repo: repo,
@@ -24,13 +26,17 @@ const getAll = async ({ context: { service, repo }, path, query }, res) => {
 	const response = await service({
 		repo: repo,
 		action: 'getAll',
-		data: { ...query, path },
+		meta: { ...query, path },
 	});
+	const { error, meta } = response;
 	const badRequest = 400;
 	const success = 200;
+	const result = error
+		? response
+		: { ...response, meta: getMeta({ ...meta, path }) };
 
-	res.status(response.error ? badRequest : success);
-	res.json(response);
+	res.status(error ? badRequest : success);
+	res.json(result);
 };
 
 const remove = async ({ params: { id }, context: { service, repo }}, res) => {
