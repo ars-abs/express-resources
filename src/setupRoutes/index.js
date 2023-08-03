@@ -1,4 +1,4 @@
-import { list, get, create, update, remove } from './controllers';
+import { list, read, create, update, remove } from './controllers';
 import enrichReq from './enrichReq';
 import { map } from '@laufire/utils/collection';
 
@@ -12,7 +12,7 @@ const setupRoutes = (context) => {
 		app.use(enrichReq({ ...context, repo }));
 		app.get(`/${ name }`, list);
 		app.post(`/${ name }`, create);
-		app.get(`/${ name }/:id`, get);
+		app.get(`/${ name }/:id`, read);
 		app.put(`/${ name }/:id`, update);
 		app.delete(`/${ name }/:id`, remove);
 	});

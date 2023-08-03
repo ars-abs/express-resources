@@ -14,7 +14,7 @@ const create = async ({	body, context: { service, repo }}, res) => {
 	res.json(response);
 };
 
-const get = async ({ context: { service, repo }, params: { id }}, res) => {
+const read = async ({ context: { service, repo }, params: { id }}, res) => {
 	const response = await service({ repo: repo, action: 'get', data: { id }});
 	const notFound = 404;
 	const success = 200;
@@ -72,7 +72,7 @@ const update = async ({
 
 export {
 	create,
-	get,
+	read,
 	list,
 	update,
 	remove,
