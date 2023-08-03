@@ -26,7 +26,7 @@ const get = async ({ context: { service, repo }, params: { id }}, res) => {
 const list = async ({ context: { service, repo }, path, query }, res) => {
 	const response = await service({
 		repo: repo,
-		action: 'getAll',
+		action: 'list',
 		meta: { ...query, path },
 	});
 	const { error, meta } = response;

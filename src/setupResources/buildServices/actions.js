@@ -34,7 +34,7 @@ const get = async ({
 	return data ? { data } : { error: { message: 'ID not found.' }};
 };
 
-const getAll = (context) => {
+const list = (context) => {
 	const { meta, repo: { name }, validators } = context;
 	const isValid = validators[name].query(meta);
 
@@ -76,7 +76,7 @@ const remove = async ({ data: { id }, repo: { db }}) => {
 
 export default {
 	get,
-	getAll,
+	list,
 	create,
 	update,
 	remove,
