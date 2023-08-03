@@ -23,7 +23,7 @@ const getData = async (context) => {
 	return { meta, data };
 };
 
-const get = async ({
+const read = async ({
 	repo: { db, name }, data: { id }, models, config: { resources },
 }) => {
 	const data = await db.findOne({
@@ -75,7 +75,7 @@ const remove = async ({ data: { id }, repo: { db }}) => {
 };
 
 export default {
-	get,
+	read,
 	list,
 	create,
 	update,
