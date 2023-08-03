@@ -23,7 +23,7 @@ const get = async ({ context: { service, repo }, params: { id }}, res) => {
 	res.json(response);
 };
 
-const getAll = async ({ context: { service, repo }, path, query }, res) => {
+const list = async ({ context: { service, repo }, path, query }, res) => {
 	const response = await service({
 		repo: repo,
 		action: 'getAll',
@@ -73,7 +73,7 @@ const update = async ({
 export {
 	create,
 	get,
-	getAll,
+	list,
 	update,
 	remove,
 };
