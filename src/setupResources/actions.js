@@ -24,9 +24,7 @@ const getData = async (context) => {
 	return { meta, data };
 };
 
-const read = async ({
-	name, data: { id }, models, config: { resources },
-}) => {
+const read = async ({ name, data: { id }, models, config: { resources }}) => {
 	const model = models[name];
 	const data = await model.findOne({
 		where: { id },
@@ -45,9 +43,7 @@ const list = (context) => {
 		: { error: { message: 'Invalid request.' }};
 };
 
-const create = async ({
-	data: { payload }, name, validators, models,
-}) => {
+const create = async ({ data: { payload }, name, validators, models }) => {
 	const isValid = validators[name].body(payload);
 	const model = models[name];
 
@@ -58,9 +54,7 @@ const create = async ({
 		: { error: { message: 'Invalid Data' }};
 };
 
-const update = async ({
-	data: { id, payload }, name, validators, models,
-}) => {
+const update = async ({ data: { id, payload }, name, validators, models }) => {
 	const isValid = validators[name].body(payload);
 	const model = models[name];
 
