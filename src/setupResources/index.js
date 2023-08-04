@@ -3,7 +3,6 @@ import buildModels from './buildModels';
 import makeRelations from './makeRelations';
 import syncModels from './syncModels';
 import buildValidators from './buildValidators';
-import buildServices from './buildServices';
 
 const setupResources = (context) => pipe([
 	buildModels,
@@ -11,7 +10,6 @@ const setupResources = (context) => pipe([
 	makeRelations,
 	syncModels,
 	buildValidators,
-	buildServices,
 ], context);
 
 export default setupResources;

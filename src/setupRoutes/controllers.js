@@ -1,13 +1,14 @@
 import { getMeta } from '../helpers/pagination';
+import actions from '../setupResources/actions';
 
 // TODO: Handle NOT FOUND and BAD REQUEST properly.
-const create = async (
-	{	body, context: { service, resource: { name }}}
-	, res
-) => {
-	const response = await service({
+const create = async ({ body, context }, res) => {
+	const action = 'create';
+	const { resource: { name }} = context;
+	const response = await actions[action]({
+		...context,
 		name: name,
-		action: 'create',
+		action: action,
 		data: { payload: body },
 	});
 	const notFound = 404;
@@ -17,11 +18,15 @@ const create = async (
 	res.json(response);
 };
 
-const read = async (
-	{ context: { service, resource: { name }}, params: { id }}
-	, res
-) => {
-	const response = await service({ name: name, action: 'read', data: { id }});
+const read = async ({ context, params: { id }}, res) => {
+	const action = 'read';
+	const { resource: { name }} = context;
+	const response = await actions[action]({
+		...context,
+		name: name,
+		action: action,
+		data: { id },
+	});
 	const notFound = 404;
 	const success = 200;
 
@@ -29,13 +34,13 @@ const read = async (
 	res.json(response);
 };
 
-const list = async (
-	{ context: { service, resource: { name }}, path, query },
-	res
-) => {
-	const response = await service({
+const list = async ({ context, path, query }, res) => {
+	const action = 'list';
+	const { resource: { name }} = context;
+	const response = await actions[action]({
+		...context,
 		name: name,
-		action: 'list',
+		action: action,
 		meta: { ...query, path },
 	});
 	const { error, meta } = response;
@@ -49,13 +54,13 @@ const list = async (
 	res.json(result);
 };
 
-const remove = async (
-	{ params: { id }, context: { service, resource: { name }}}
-	, res
-) => {
-	const response = await service({
+const remove = async ({ params: { id }, context }, res) => {
+	const action = 'remove';
+	const { resource: { name }} = context;
+	const response = await actions[action]({
+		...context,
 		name: name,
-		action: 'remove',
+		action: action,
 		data: { id },
 	});
 	const notFound = 404;
@@ -65,14 +70,13 @@ const remove = async (
 	res.json(response);
 };
 
-const update = async ({
-	body,
-	params: { id },
-	context: { service, resource: { name }},
-}, res) => {
-	const response = await service({
+const update = async ({ body, params: { id }, context }, res) => {
+	const action = 'update';
+	const { resource: { name }} = context;
+	const response = await actions[action]({
+		...context,
 		name: name,
-		action: 'update',
+		action: action,
 		data: { id: id, payload: body },
 	});
 	const notFound = 404;
