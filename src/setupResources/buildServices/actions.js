@@ -9,12 +9,13 @@ const getIncludes = ({ name, resources, models }) => {
 };
 
 const getData = async (context) => {
-	const { repo: { name, db }, models, config: { resources }} = context;
+	const { name, models, config: { resources }} = context;
+	const model = models[name];
 	const options = {
 		...getOptions(context),
 		include: getIncludes({ name, resources, models }),
 	};
-	const { count, rows } = await db.findAndCountAll(options);
+	const { count, rows } = await model.findAndCountAll(options);
 	const { limit, offset } = options;
 	const nextOffset = limit + offset;
 	const meta = { limit: limit, offset: nextOffset, totalCount: count };
@@ -24,9 +25,10 @@ const getData = async (context) => {
 };
 
 const read = async ({
-	repo: { db, name }, data: { id }, models, config: { resources },
+	name, data: { id }, models, config: { resources },
 }) => {
-	const data = await db.findOne({
+	const model = models[name];
+	const data = await model.findOne({
 		where: { id },
 		include: getIncludes({ name, resources, models }),
 	});
@@ -35,7 +37,7 @@ const read = async ({
 };
 
 const list = (context) => {
-	const { meta, repo: { name }, validators } = context;
+	const { meta, name, validators } = context;
 	const isValid = validators[name].query(meta);
 
 	return isValid
@@ -44,32 +46,36 @@ const list = (context) => {
 };
 
 const create = async ({
-	data: { payload }, repo: { db, name }, validators,
+	data: { payload }, name, validators, models,
 }) => {
 	const isValid = validators[name].body(payload);
+	const model = models[name];
 
 	return isValid
 		? {
-			data: await db.create({ ...payload, id: getUUID() }),
+			data: await model.create({ ...payload, id: getUUID() }),
 		}
 		: { error: { message: 'Invalid Data' }};
 };
 
 const update = async ({
-	data: { id, payload }, repo: { db, name }, validators,
+	data: { id, payload }, name, validators, models,
 }) => {
 	const isValid = validators[name].body(payload);
+	const model = models[name];
 
 	return isValid
 		? {
-			data: await db.update(payload, { where: { id }})
-			&& await db.findOne({ where: { id }}),
+			data: await model.update(payload, { where: { id }})
+			&& await model.findOne({ where: { id }}),
 		}
 		: { error: { message: 'Invalid data.' }};
 };
 
-const remove = async ({ data: { id }, repo: { db }}) => {
-	const isRemoved = await db.destroy({ where: { id }});
+const remove = async ({ data: { id }, name, models }) => {
+	const model = models[name];
+
+	const isRemoved = await model.destroy({ where: { id }});
 
 	return isRemoved ? { data: { id }} : { error: { message: 'Invalid ID' }};
 };
