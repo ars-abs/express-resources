@@ -1,6 +1,7 @@
 import { map } from '@laufire/utils/collection';
 import { v4 as getUUID } from 'uuid';
 import { getOptions } from '../helpers/pagination';
+import validators from '../validators';
 
 const getIncludes = ({ name, resources, models }) => {
 	const { includes = [] } = resources[name];
@@ -24,9 +25,12 @@ const getData = async (context) => {
 	return { meta, data };
 };
 
-const read = async ({ name, data: { id }, models, config: { resources }}) => {
+const read = async (context) => {
+	const {
+		name, models, action, config: { resources }, data: { id },
+	} = context;
 	const model = models[name];
-	const data = await model.findOne({
+	const data = validators[action](context) && await model.findOne({
 		where: { id },
 		include: getIncludes({ name, resources, models }),
 	});
@@ -35,16 +39,17 @@ const read = async ({ name, data: { id }, models, config: { resources }}) => {
 };
 
 const list = (context) => {
-	const { meta, name, validators } = context;
-	const isValid = validators[name].query(meta);
+	const { action } = context;
+	const isValid = validators[action](context);
 
 	return isValid
 		? getData(context)
 		: { error: { message: 'Invalid request.' }};
 };
 
-const create = async ({ data: { payload }, name, validators, models }) => {
-	const isValid = validators[name].body(payload);
+const create = async (context) => {
+	const { data: { payload }, name, action, models } = context;
+	const isValid = validators[action](context);
 	const model = models[name];
 
 	return isValid
@@ -54,8 +59,9 @@ const create = async ({ data: { payload }, name, validators, models }) => {
 		: { error: { message: 'Invalid Data' }};
 };
 
-const update = async ({ data: { id, payload }, name, validators, models }) => {
-	const isValid = validators[name].body(payload);
+const update = async (context) => {
+	const { data: { id, payload }, action, name, models } = context;
+	const isValid = validators[action](context);
 	const model = models[name];
 
 	return isValid
@@ -66,10 +72,12 @@ const update = async ({ data: { id, payload }, name, validators, models }) => {
 		: { error: { message: 'Invalid data.' }};
 };
 
-const remove = async ({ data: { id }, name, models }) => {
+const remove = async (context) => {
+	const { data: { id }, name, action, models } = context;
 	const model = models[name];
 
-	const isRemoved = await model.destroy({ where: { id }});
+	const isRemoved = validators[action](context)
+		&& await model.destroy({ where: { id }});
 
 	return isRemoved ? { data: { id }} : { error: { message: 'Invalid ID' }};
 };
