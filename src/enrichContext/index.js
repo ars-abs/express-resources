@@ -1,7 +1,7 @@
 import enrichResources from './enrichResources';
 import { pipe } from '../helpers';
 import extendSchema from './extendSchema';
-import denormalizeConfig from '../denormalizeConfig';
+import denormalizeConfig from './denormalizeConfig';
 
 const enrichContext = (context) => pipe([
 	extendSchema,
