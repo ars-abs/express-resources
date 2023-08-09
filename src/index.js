@@ -4,8 +4,9 @@ import setupResources from './setupResources';
 import setupRoutes from './setupRoutes';
 
 const expressResources = (context) => pipe([
+	enrichContext,
 	setupResources,
 	setupRoutes,
-], enrichContext(context));
+], context);
 
 export { expressResources };
