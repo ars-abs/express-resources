@@ -3,10 +3,10 @@ import { pipe } from '../helpers';
 import extendSchema from './extendSchema';
 import denormalizeConfig from './denormalizeConfig';
 
-const enrichContext = (context) => pipe([
+const parseContext = (context) => pipe([
 	extendSchema,
 	denormalizeConfig,
 	enrichResources,
 ], context);
 
-export default enrichContext;
+export default parseContext;

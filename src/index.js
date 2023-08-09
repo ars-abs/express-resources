@@ -1,10 +1,10 @@
 import { pipe } from './helpers';
-import enrichContext from './enrichContext';
+import parseContext from './parseContext';
 import setupResources from './setupResources';
 import setupRoutes from './setupRoutes';
 
 const expressResources = (context) => pipe([
-	enrichContext,
+	parseContext,
 	setupResources,
 	setupRoutes,
 ], context);
