@@ -1,13 +1,6 @@
-import { map } from '@laufire/utils/collection';
 import { convertSchema } from '../../lib/types';
 import extendPagination from './extendPagination';
-
-const translateSchema = ({ properties, ...rest }) => ({
-	...rest,
-	properties: map(properties, (props) => (props.format === 'ref'
-		? { ...props, format: 'uuid' }
-		: props)),
-});
+import translateSchema from './translateSchema';
 
 const enrichResource = ({ resource }) => {
 	const { schema, name, pagination = {}} = resource;
