@@ -1,22 +1,21 @@
 import { isDefined } from '@laufire/utils/reflection';
-import ajv from './setupResources/buildValidators/setupAjv';
 import { find } from '@laufire/utils/collection';
 
 const validateID = ({ data: { id }}) => isDefined(id);
 
-const validateQuery = ({ name, meta, config: { resources }}) => {
-	const { pagination: { querySchema: schema }} = resources[name];
+const validateQuery = ({ name, meta, validators }) => {
+	const { query: validate } = validators[name];
 
-	return ajv.validate(schema, meta);
+	return validate(meta);
 };
 
-const validateSchema = ({ name, data: { payload }, config: { resources }}) => {
-	const { schema } = resources[name];
+const validateSchema = ({ name, data: { payload }, validators }) => {
+	const { schema: validate } = validators[name];
 
-	return ajv.validate(schema, payload);
+	return validate(payload);
 };
 
-const validators = {
+const actionValidators = {
 	read: [validateID],
 	list: [validateQuery],
 	create: [validateSchema],
@@ -24,13 +23,13 @@ const validators = {
 	remove: [validateID],
 };
 
-const pipe = (pipes, context) =>
-	!find(pipes, (validator) => !validator(context));
+const isValid = (validators, context) =>
+	!find(validators, (validator) => !validator(context));
 
 const validate = (context) => {
 	const { action } = context;
 
-	return Boolean(pipe(validators[action], context));
+	return Boolean(isValid(actionValidators[action], context));
 };
 
 export default validate;
