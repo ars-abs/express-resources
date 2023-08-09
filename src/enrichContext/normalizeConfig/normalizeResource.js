@@ -1,4 +1,4 @@
-import { keys, map, merge } from '@laufire/utils/collection';
+import { keys, map } from '@laufire/utils/collection';
 import { convertSchema } from '../../lib/types';
 
 const translateSchema = ({ properties, ...rest }) => ({
@@ -29,17 +29,15 @@ const extendPagination = (pagination) => {
 	return { ...pagination, querySchema };
 };
 
-const normalizeResource = ({ resource, key, schemaExtensions }) => {
+const normalizeResource = ({ resource, key }) => {
 	const { schema, name = key, pagination = {}} = resource;
-	const extendedSchema = merge({ properties: schemaExtensions }, schema);
-	const translatedSchema = translateSchema(extendedSchema);
+	const translatedSchema = translateSchema(schema);
 
 	return {
 		...resource,
 		name: name,
 		pagination: extendPagination(pagination),
 		repoSchema: convertSchema({ ...translatedSchema, id: `${ name }` }).props,
-		schema: extendedSchema,
 	};
 };
 
