@@ -29,16 +29,15 @@ const extendPagination = (pagination) => {
 	return { ...pagination, querySchema };
 };
 
-const normalizeResource = ({ resource, key }) => {
-	const { schema, name = key, pagination = {}} = resource;
+const enrichResource = ({ resource }) => {
+	const { schema, name, pagination = {}} = resource;
 	const translatedSchema = translateSchema(schema);
 
 	return {
 		...resource,
-		name: name,
 		pagination: extendPagination(pagination),
 		repoSchema: convertSchema({ ...translatedSchema, id: `${ name }` }).props,
 	};
 };
 
-export default normalizeResource;
+export default enrichResource;

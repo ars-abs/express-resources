@@ -1,7 +1,8 @@
-import normalizeConfig from './normalizeConfig';
+import { merge } from '@laufire/utils/collection';
+import enrichResources from './enrichResources';
 
-const enrichContext = (context) => ({
-	...context, config: normalizeConfig(context),
-});
+const enrichContext = (context) => merge(
+	{}, context, enrichResources(context),
+);
 
 export default enrichContext;
