@@ -1,8 +1,12 @@
-import { merge } from '@laufire/utils/collection';
 import enrichResources from './enrichResources';
+import { pipe } from '../helpers';
+import extendSchema from './extendSchema';
+import denormalizeConfig from '../denormalizeConfig';
 
-const enrichContext = (context) => merge(
-	{}, context, enrichResources(context),
-);
+const enrichContext = (context) => pipe([
+	extendSchema,
+	denormalizeConfig,
+	enrichResources,
+], context);
 
 export default enrichContext;
