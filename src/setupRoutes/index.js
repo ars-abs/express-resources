@@ -1,20 +1,27 @@
-import { list, read, create, update, remove } from './controllers';
+import { reduce } from '@laufire/utils/collection';
+import { create, list, read, remove, update } from './controllers';
 import enrichReq from './enrichReq';
-import { map } from '@laufire/utils/collection';
-
 const setupRoutes = (context) => {
-	const { app, config: { resources }} = context;
+	const { config: { resources }} = context;
 
-	map(resources, (resource) => {
-		const { name } = resource;
+	return {
+		routes: reduce(
+			resources, (acc, resource) => {
+				const { name } = resource;
 
-		app.use(enrichReq({ ...context, resource }));
-		app.get(`/${ name }`, list);
-		app.post(`/${ name }`, create);
-		app.get(`/${ name }/:id`, read);
-		app.put(`/${ name }/:id`, update);
-		app.delete(`/${ name }/:id`, remove);
-	});
+				const enrichedReq = enrichReq({ ...context, resource });
+
+				return {
+					...acc,
+					[`GET /${ name }`]: [enrichedReq, list],
+					[`GET /${ name }/:id`]: [enrichedReq, read],
+					[`POST /${ name }`]: [enrichedReq, create],
+					[`PUT /${ name }/:id`]: [enrichedReq, update],
+					[`DELETE /${ name }/:id`]: [enrichedReq, remove],
+				};
+			}, {}
+		),
+	};
 };
 
 export default setupRoutes;
