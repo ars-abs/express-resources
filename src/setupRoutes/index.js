@@ -1,6 +1,7 @@
 import { reduce } from '@laufire/utils/collection';
 import { create, list, read, remove, update } from './controllers';
-import enrichReq from './enrichReq';
+import genEnrichReq from './enrichReq';
+
 const setupRoutes = (context) => {
 	const { config: { resources }} = context;
 
@@ -8,16 +9,15 @@ const setupRoutes = (context) => {
 		routes: reduce(
 			resources, (acc, resource) => {
 				const { name } = resource;
-
-				const enrichedReq = enrichReq({ ...context, resource });
+				const enrichReq = genEnrichReq({ ...context, resource });
 
 				return {
 					...acc,
-					[`GET /${ name }`]: [enrichedReq, list],
-					[`GET /${ name }/:id`]: [enrichedReq, read],
-					[`POST /${ name }`]: [enrichedReq, create],
-					[`PUT /${ name }/:id`]: [enrichedReq, update],
-					[`DELETE /${ name }/:id`]: [enrichedReq, remove],
+					[`GET /${ name }`]: [enrichReq, list],
+					[`GET /${ name }/:id`]: [enrichReq, read],
+					[`POST /${ name }`]: [enrichReq, create],
+					[`PUT /${ name }/:id`]: [enrichReq, update],
+					[`DELETE /${ name }/:id`]: [enrichReq, remove],
 				};
 			}, {}
 		),
