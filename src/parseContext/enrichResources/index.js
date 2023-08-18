@@ -6,8 +6,8 @@ const enrichResources = ({ config }) => {
 
 	return {
 		config: {
-			resources: map(resources, (resource, key) =>
-				enrichResource({ resource, key })),
+			resources: map(resources, (resource) =>
+				enrichResource({ resource })),
 		},
 	} ;
 };
