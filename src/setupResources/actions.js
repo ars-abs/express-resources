@@ -60,12 +60,12 @@ const update = async (context) => {
 	const { data: { id, payload }, name, models } = context;
 	const isValid = validate(context);
 	const model = models[name];
+	const isUpdated = await model.update(payload, { where: { id }});
 
 	return isValid
-		? {
-			data: await model.update(payload, { where: { id }})
-			&& await model.findOne({ where: { id }}),
-		}
+		? isUpdated
+			? { data: await model.findOne({ where: { id }}) }
+			: { error: { message: 'Invalid ID.' }}
 		: { error: { message: 'Invalid data.' }};
 };
 
