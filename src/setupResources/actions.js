@@ -50,9 +50,7 @@ const create = async (context) => {
 	const model = models[name];
 
 	return isValid
-		? {
-			data: await model.create({ ...payload, id: getUUID() }),
-		}
+		? {	data: await model.create({ ...payload, id: getUUID() }) }
 		: { error: { message: 'Invalid Data' }};
 };
 
