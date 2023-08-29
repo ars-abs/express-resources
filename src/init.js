@@ -1,12 +1,12 @@
 import denormalize from './denormalize';
 import exportResources from './exportResources';
 import { pipe } from './helpers';
-import includeActions from './parseContext/includeActions';
+import includeServices from './parseContext/includeServices';
 import setupRoutes from './setupRoutes';
 
 const init = (context) => pipe([
 	denormalize,
-	includeActions,
+	includeServices,
 	setupRoutes,
 	exportResources,
 ], context);
