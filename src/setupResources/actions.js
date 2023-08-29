@@ -1,7 +1,7 @@
 import { map } from '@laufire/utils/collection';
 import { v4 as getUUID } from 'uuid';
 import { getOptions } from '../helpers/pagination';
-import validate from '../validate';
+import validate from './validate';
 
 const getIncludes = ({ name, resources, models }) => {
 	const { includes = [] } = resources[name];
