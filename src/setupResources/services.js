@@ -25,12 +25,12 @@ const update = async (context) => {
 	const model = models[name];
 	const [
 		isUpdated,
-		[{ dataValues }],
+		[updatedData],
 	] = await model.update(payload, { where: { id }, returning: true });
 
 	return isValid
 		? isUpdated
-			? { data: dataValues }
+			? { data: updatedData.dataValues }
 			: { error: { message: 'Invalid ID.' }}
 		: { error: { message: 'Invalid data.' }};
 };
