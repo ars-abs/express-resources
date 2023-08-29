@@ -1,6 +1,6 @@
 import { pipe } from './helpers';
 import denormalize from './denormalize';
-import includeServices from './parseContext/includeServices';
+import includeServices from './includeServices';
 import includeStore from './includeStore';
 import setupRoutes from './setupRoutes';
 import exportResources from './exportResources';

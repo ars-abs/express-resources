@@ -1,4 +1,4 @@
-import services from '../setupResources/services';
+import services from './setupResources/services';
 
 const includeServices = () => ({ services });
 
