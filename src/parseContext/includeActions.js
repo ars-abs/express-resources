@@ -1,4 +1,4 @@
-import actions from '../setupResources/actions';
+import actions from '../setupResources/services';
 
 const includeActions = () => ({ actions });
 
