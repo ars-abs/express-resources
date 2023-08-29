@@ -1,4 +1,3 @@
-import { v4 as getUUID } from 'uuid';
 import validate from './validate';
 import store from './store';
 
@@ -9,21 +8,15 @@ const read = async (context) => {
 };
 
 const list = async (context) => {
-	const isValid = validate(context);
+	const data = validate(context) && await store(context);
 
-	return isValid
-		? { data: await store(context) }
-		: { error: { message: 'Invalid request.' }};
+	return data ? { data } : { error: { message: 'Invalid request.' }};
 };
 
 const create = async (context) => {
-	const { data: { payload }, name, models } = context;
-	const isValid = validate(context);
-	const model = models[name];
+	const data = validate(context) && await store(context);
 
-	return isValid
-		? { data: await model.create({ ...payload, id: getUUID() }) }
-		: { error: { message: 'Invalid Data' }};
+	return data ? { data } : { error: { message: 'Invalid Data' }};
 };
 
 const update = async (context) => {

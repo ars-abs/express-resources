@@ -1,4 +1,5 @@
 import { map } from '@laufire/utils/collection';
+import { v4 as getUUID } from 'uuid';
 import { getOptions } from '../helpers/pagination';
 
 const getIncludes = ({ name, resources, models }) => {
@@ -35,9 +36,19 @@ const list = async (context) => {
 	return { meta, data };
 };
 
+const create = async (context) => {
+	const { data: { payload }, name, models } = context;
+	const model = models[name];
+
+	const res = await model.create({ ...payload, id: getUUID() });
+
+	return res;
+};
+
 const actions = {
 	read,
 	list,
+	create,
 };
 
 const store = (context) => {
