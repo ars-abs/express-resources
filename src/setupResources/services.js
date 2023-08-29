@@ -3,16 +3,16 @@ import validate from './validate';
 import store from './store';
 
 const read = async (context) => {
-	const data = validate(context) && await store.read(context);
+	const data = validate(context) && await store(context);
 
 	return data ? { data } : { error: { message: 'ID not found.' }};
 };
 
-const list = (context) => {
+const list = async (context) => {
 	const isValid = validate(context);
 
 	return isValid
-		? store.list(context)
+		? { data: await store(context) }
 		: { error: { message: 'Invalid request.' }};
 };
 
@@ -52,7 +52,8 @@ const remove = async (context) => {
 	return isRemoved ? { data: { id }} : { error: { message: 'Invalid ID' }};
 };
 
-const temp = {
+// eslint-disable-next-line object-shorthand
+const actions = {
 	read,
 	list,
 	create,
@@ -63,7 +64,7 @@ const temp = {
 const services = (context) => {
 	const { action } = context;
 
-	return temp[action];
+	return actions[action](context);
 };
 
 export default services;
