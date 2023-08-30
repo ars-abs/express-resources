@@ -55,7 +55,7 @@ const update = async (context) => {
 
 	return isUpdated
 		? { data: updatedData.dataValues }
-		: { error: { message: 'Invalid ID.' }};
+		: { error: { message: 'invalidID.' }};
 };
 
 const remove = async (context) => {

@@ -4,32 +4,32 @@ import store from './store';
 const read = async (context) => {
 	const data = validate(context) && await store(context);
 
-	return data ? { data } : { error: { message: 'ID not found.' }};
+	return data ? { data } : { error: { message: 'idNotFound.' }};
 };
 
 const list = async (context) => {
 	const data = validate(context) && await store(context);
 
-	return data ? { data } : { error: { message: 'Invalid request.' }};
+	return data ? { data } : { error: { message: 'invalidRequest.' }};
 };
 
 const create = async (context) => {
 	const data = validate(context) && await store(context);
 
-	return data ? { data } : { error: { message: 'Invalid Data' }};
+	return data ? { data } : { error: { message: 'invalidData' }};
 };
 
 const update = async (context) => {
 	const data = validate(context) && await store(context);
 
-	return data ? { ...data } : { error: { message: 'Invalid data.' }};
+	return data ? { ...data } : { error: { message: 'invalidData.' }};
 };
 
 const remove = async (context) => {
 	const { data: { id }} = context;
 	const isRemoved = validate(context) && await store(context);
 
-	return isRemoved ? { data: { id }} : { error: { message: 'Invalid ID' }};
+	return isRemoved ? { data: { id }} : { error: { message: 'invalidID' }};
 };
 
 const actions = {
