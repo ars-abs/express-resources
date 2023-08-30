@@ -20,19 +20,9 @@ const create = async (context) => {
 };
 
 const update = async (context) => {
-	const { data: { id, payload }, name, models } = context;
-	const isValid = validate(context);
-	const model = models[name];
-	const [
-		isUpdated,
-		[updatedData],
-	] = await model.update(payload, { where: { id }, returning: true });
+	const data = validate(context) && await store(context);
 
-	return isValid
-		? isUpdated
-			? { data: updatedData.dataValues }
-			: { error: { message: 'Invalid ID.' }}
-		: { error: { message: 'Invalid data.' }};
+	return data ? { ...data } : { error: { message: 'Invalid data.' }};
 };
 
 const remove = async (context) => {

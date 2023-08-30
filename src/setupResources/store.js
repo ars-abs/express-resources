@@ -45,6 +45,19 @@ const create = async (context) => {
 	return res;
 };
 
+const update = async (context) => {
+	const { data: { id, payload }, name, models } = context;
+	const model = models[name];
+	const [
+		isUpdated,
+		[updatedData],
+	] = await model.update(payload, { where: { id }, returning: true });
+
+	return isUpdated
+		? { data: updatedData.dataValues }
+		: { error: { message: 'Invalid ID.' }};
+};
+
 const remove = async (context) => {
 	const { data: { id }, name, models } = context;
 	const model = models[name];
@@ -58,6 +71,7 @@ const actions = {
 	read,
 	list,
 	create,
+	update,
 	remove,
 };
 
