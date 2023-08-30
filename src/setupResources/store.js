@@ -12,12 +12,12 @@ const read = async (context) => {
 	const { name, models, config: { resources }, data: { id }} = context;
 	const model = models[name];
 
-	const res = await model.findOne({
-		where: { id },
-		include: getIncludes({ name, resources, models }),
-	});
-
-	return res;
+	return {
+		data: await model.findOne({
+			where: { id },
+			include: getIncludes({ name, resources, models }),
+		}),
+	};
 };
 
 const list = async (context) => {

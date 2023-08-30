@@ -2,9 +2,12 @@ import validate from './validate';
 
 const read = async (context) => {
 	const { store } = context;
-	const data = validate(context) && await store(context);
+	const error = validate(context)
+		? undefined
+		: { error: { message: 'idNotFound' }};
+	const response = error || await store(context);
 
-	return data ? { data } : { error: { message: 'idNotFound.' }};
+	return { error, ...response };
 };
 
 const list = async (context) => {
