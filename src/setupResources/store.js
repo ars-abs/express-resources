@@ -45,10 +45,20 @@ const create = async (context) => {
 	return res;
 };
 
+const remove = async (context) => {
+	const { data: { id }, name, models } = context;
+	const model = models[name];
+
+	const res = await model.destroy({ where: { id }});
+
+	return res;
+};
+
 const actions = {
 	read,
 	list,
 	create,
+	remove,
 };
 
 const store = (context) => {

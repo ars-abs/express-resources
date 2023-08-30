@@ -36,16 +36,12 @@ const update = async (context) => {
 };
 
 const remove = async (context) => {
-	const { data: { id }, name, models } = context;
-	const model = models[name];
-
-	const isRemoved = validate(context)
-		&& await model.destroy({ where: { id }});
+	const { data: { id }} = context;
+	const isRemoved = validate(context) && await store(context);
 
 	return isRemoved ? { data: { id }} : { error: { message: 'Invalid ID' }};
 };
 
-// eslint-disable-next-line object-shorthand
 const actions = {
 	read,
 	list,
