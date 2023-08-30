@@ -40,9 +40,7 @@ const create = async (context) => {
 	const { data: { payload }, name, models } = context;
 	const model = models[name];
 
-	const res = await model.create({ ...payload, id: getUUID() });
-
-	return res;
+	return { data: await model.create({ ...payload, id: getUUID() }) };
 };
 
 const update = async (context) => {
