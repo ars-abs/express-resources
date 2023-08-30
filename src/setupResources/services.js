@@ -12,9 +12,12 @@ const read = async (context) => {
 
 const list = async (context) => {
 	const { store } = context;
-	const data = validate(context) && await store(context);
+	const error = validate(context)
+		? undefined
+		: { error: { message: 'invalidRequest' }};
+	const response = error || await store(context);
 
-	return data ? { data } : { error: { message: 'invalidRequest.' }};
+	return { error, ...response };
 };
 
 const create = async (context) => {
