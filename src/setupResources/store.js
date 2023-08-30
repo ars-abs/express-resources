@@ -53,7 +53,7 @@ const update = async (context) => {
 
 	return isUpdated
 		? { data: updatedData.dataValues }
-		: { error: { message: 'invalidID.' }};
+		: { error: { message: 'invalidID' }};
 };
 
 const remove = async (context) => {
@@ -62,7 +62,7 @@ const remove = async (context) => {
 
 	const res = await model.destroy({ where: { id }});
 
-	return res;
+	return res ? { data: { id }} : { error: { message: 'idNotFound' }};
 };
 
 const actions = {

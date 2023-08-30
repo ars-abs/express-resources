@@ -41,10 +41,13 @@ const update = async (context) => {
 };
 
 const remove = async (context) => {
-	const { store, data: { id }} = context;
-	const isRemoved = validate(context) && await store(context);
+	const { store } = context;
+	const error = validate(context)
+		? undefined
+		: { error: { message: 'invalidID' }};
+	const response = error || await store(context);
 
-	return isRemoved ? { data: { id }} : { error: { message: 'invalidID' }};
+	return { error, ...response };
 };
 
 const actions = {
