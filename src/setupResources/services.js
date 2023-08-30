@@ -20,9 +20,12 @@ const create = async (context) => {
 };
 
 const update = async (context) => {
-	const data = validate(context) && await store(context);
+	const error = validate(context)
+		? undefined
+		: { error: { message: 'invalidData' }};
+	const response = error || await store(context);
 
-	return data ? { ...data } : { error: { message: 'invalidData.' }};
+	return { error, ...response };
 };
 
 const remove = async (context) => {
