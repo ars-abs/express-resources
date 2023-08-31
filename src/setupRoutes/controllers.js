@@ -3,9 +3,9 @@ import { getMeta } from '../helpers/pagination';
 // TODO: Handle NOT FOUND and BAD REQUEST properly.
 const create = async ({ body: payload, context }, res) => {
 	const action = 'create';
-	const { services, resource: { name }} = context;
+	const { service, resource: { name }} = context;
 	const data = { payload };
-	const response = await services({ ...context, name, action, data });
+	const response = await service({ ...context, name, action, data });
 	const notFound = 404;
 	const created = 201;
 
@@ -15,9 +15,9 @@ const create = async ({ body: payload, context }, res) => {
 
 const read = async ({ context, params: { id }}, res) => {
 	const action = 'read';
-	const { services, resource: { name }} = context;
+	const { service, resource: { name }} = context;
 	const data = { id };
-	const response = await services({ ...context, name, action, data });
+	const response = await service({ ...context, name, action, data });
 	const notFound = 404;
 	const success = 200;
 
@@ -27,9 +27,9 @@ const read = async ({ context, params: { id }}, res) => {
 
 const list = async ({ context, path, query }, res) => {
 	const action = 'list';
-	const { services, resource: { name }} = context;
+	const { service, resource: { name }} = context;
 	const meta = { ...query, path };
-	const response = await services({ ...context, name, action, meta });
+	const response = await service({ ...context, name, action, meta });
 	const { error } = response;
 	const badRequest = 400;
 	const success = 200;
@@ -43,9 +43,9 @@ const list = async ({ context, path, query }, res) => {
 
 const remove = async ({ params: { id }, context }, res) => {
 	const action = 'remove';
-	const { services, resource: { name }} = context;
+	const { service, resource: { name }} = context;
 	const data = { id };
-	const response = await services({ ...context, name, action, data });
+	const response = await service({ ...context, name, action, data });
 	const notFound = 404;
 	const success = 200;
 
@@ -55,9 +55,9 @@ const remove = async ({ params: { id }, context }, res) => {
 
 const update = async ({ body: payload, params: { id }, context }, res) => {
 	const action = 'update';
-	const { services, resource: { name }} = context;
+	const { service, resource: { name }} = context;
 	const data = { id, payload };
-	const response = await services({ ...context, name, action, data });
+	const response = await service({ ...context, name, action, data });
 	const notFound = 404;
 	const updated = 200;
 
