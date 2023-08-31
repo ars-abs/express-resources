@@ -1,18 +1,19 @@
 import { isDefined } from '@laufire/utils/reflection';
-import { find } from '@laufire/utils/collection';
+import { reduce } from '@laufire/utils/collection';
 
-const validateID = ({ data: { id }}) => isDefined(id);
+const validateID = ({ data: { id }}) =>
+	(isDefined(id) ? {} : { error: { message: 'idNotFound' }});
 
 const validateQuery = ({ name, meta, validators }) => {
 	const { query: validate } = validators[name];
 
-	return validate(meta);
+	return validate(meta) ? {} : { error: { message: 'invalidRequest' }};
 };
 
 const validateSchema = ({ name, data: { payload }, validators }) => {
 	const { schema: validate } = validators[name];
 
-	return validate(payload);
+	return validate(payload) ? {} : { error: { message: 'invalidData' }};
 };
 
 const actionValidators = {
@@ -23,13 +24,14 @@ const actionValidators = {
 	remove: [validateID],
 };
 
-const isValid = (validators, context) =>
-	!find(validators, (validator) => !validator(context));
+const isValid = (validators, context) => reduce(
+	validators, (acc, validator) => (acc.error ? acc : validator(context)), {}
+);
 
 const validate = (context) => {
 	const { action } = context;
 
-	return Boolean(isValid(actionValidators[action], context));
+	return isValid(actionValidators[action], context);
 };
 
 export default validate;

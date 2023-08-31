@@ -2,9 +2,7 @@ import validate from './validate';
 
 const read = async (context) => {
 	const { store } = context;
-	const error = validate(context)
-		? undefined
-		: { error: { message: 'idNotFound' }};
+	const { error } = validate(context);
 	const response = error || await store(context);
 
 	return { error, ...response };
@@ -12,9 +10,7 @@ const read = async (context) => {
 
 const list = async (context) => {
 	const { store } = context;
-	const error = validate(context)
-		? undefined
-		: { error: { message: 'invalidRequest' }};
+	const { error } = validate(context);
 	const response = error || await store(context);
 
 	return { error, ...response };
@@ -22,9 +18,7 @@ const list = async (context) => {
 
 const create = async (context) => {
 	const { store } = context;
-	const error = validate(context)
-		? undefined
-		: { error: { message: 'invalidData' }};
+	const { error } = validate(context);
 	const response = error || await store(context);
 
 	return { error, ...response };
@@ -32,9 +26,7 @@ const create = async (context) => {
 
 const update = async (context) => {
 	const { store } = context;
-	const error = validate(context)
-		? undefined
-		: { error: { message: 'invalidData' }};
+	const { error } = validate(context);
 	const response = error || await store(context);
 
 	return { error, ...response };
@@ -42,9 +34,7 @@ const update = async (context) => {
 
 const remove = async (context) => {
 	const { store } = context;
-	const error = validate(context)
-		? undefined
-		: { error: { message: 'invalidID' }};
+	const { error } = validate(context);
 	const response = error || await store(context);
 
 	return { error, ...response };
