@@ -1,5 +1,5 @@
-import services from './setupResources/services';
+import service from './setupResources/service';
 
-const includeServices = () => ({ services });
+const includeServices = () => ({ services: service });
 
 export default includeServices;
