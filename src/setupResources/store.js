@@ -34,7 +34,7 @@ const read = async (context) => {
 			: { error: { code: 'idNotFound' }};
 	});
 
-	return response.error ? { error: response.error } : response;
+	return response;
 };
 
 const list = async (context) => {
@@ -54,7 +54,7 @@ const list = async (context) => {
 		return { meta, data };
 	});
 
-	return response.error ? { error: response.error } : response;
+	return response;
 };
 
 const create = async (context) => {
@@ -67,7 +67,7 @@ const create = async (context) => {
 		return { data };
 	});
 
-	return response.error ? { error: response.error } : response;
+	return response;
 };
 
 const update = async (context) => {
@@ -102,7 +102,7 @@ const remove = async (context) => {
 			: { error: { code: 'idNotFound' }};
 	});
 
-	return response.error ? { error: response.error } : response;
+	return response;
 };
 
 const actions = {
