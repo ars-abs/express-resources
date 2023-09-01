@@ -56,10 +56,16 @@ const tryCatch = async (fn) => {
 	}
 };
 
+const pipeline = (pipes) =>
+	(context) => reduceSync(
+		pipes, (acc, fn) => (acc.error ? acc : fn(context)), {}
+	);
+
 export {
 	mapAsync,
 	reduceSync,
 	runSteps,
 	pipe,
 	tryCatch,
+	pipeline,
 };
