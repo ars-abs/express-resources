@@ -29,7 +29,9 @@ const read = async (context) => {
 			include: getIncludes({ name, resources, models }),
 		});
 
-		return { data };
+		return data
+			? { data }
+			: { error: { code: 'idNotFound' }};
 	});
 
 	return response.error ? { error: response.error } : response;
