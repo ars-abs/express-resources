@@ -13,18 +13,14 @@ const read = async (context) => {
 	const { name, models, config: { resources }, data: { id }} = context;
 	const model = models[name];
 
-	const response = await tryCatch(async () => {
-		const data = await model.findOne({
-			where: { id },
-			include: getIncludes({ name, resources, models }),
-		});
-
-		return data
-			? { data }
-			: { error: { code: 'idNotFound' }};
+	const data = await model.findOne({
+		where: { id },
+		include: getIncludes({ name, resources, models }),
 	});
 
-	return response;
+	return data
+		? { data }
+		: { error: { code: 'idNotFound' }};
 };
 
 const list = async (context) => {
@@ -34,65 +30,42 @@ const list = async (context) => {
 		...getOptions(context),
 		include: getIncludes({ name, resources, models }),
 	};
-	const response = await tryCatch(async () => {
-		const { count, rows } = await model.findAndCountAll(options);
-		const { limit, offset } = options;
-		const nextOffset = limit + offset;
-		const meta = { limit: limit, offset: nextOffset, totalCount: count };
-		const data = map(rows, (row) => row.dataValues);
+	const { count, rows } = await model.findAndCountAll(options);
+	const { limit, offset } = options;
+	const nextOffset = limit + offset;
+	const meta = { limit: limit, offset: nextOffset, totalCount: count };
+	const data = map(rows, (row) => row.dataValues);
 
-		return { meta, data };
-	});
-
-	return response;
+	return { meta, data };
 };
 
 const create = async (context) => {
 	const { data: { payload }, name, models } = context;
 	const model = models[name];
 
-	const response = await tryCatch(async () => {
-		const data = await model.create({ ...payload, id: getUUID() });
-
-		return { data };
-	});
-
-	return response;
+	return { data: await model.create({ ...payload, id: getUUID() }) };
 };
 
 const update = async (context) => {
 	const { data: { id, payload }, name, models } = context;
 	const model = models[name];
+	const [
+		isUpdated,
+		[updatedData],
+	] = await model.update(payload, { where: { id }, returning: true });
 
-	const response = await tryCatch(async () => {
-		const [
-			isUpdated,
-			[updatedData],
-		] = await model.update(payload, { where: { id }, returning: true });
-
-		return isUpdated
-			? { data: updatedData.dataValues }
-			: { error: { code: 'invalidID' }};
-	});
-
-	return response.error
-		? { error: response.error }
-		: response;
+	return isUpdated
+		? { data: updatedData.dataValues }
+		: { error: { code: 'invalidID' }};
 };
 
 const remove = async (context) => {
 	const { data: { id }, name, models } = context;
 	const model = models[name];
 
-	const response = await tryCatch(async () => {
-		const data = await model.destroy({ where: { id }});
+	const res = await model.destroy({ where: { id }});
 
-		return data
-			? { data: { id }}
-			: { error: { code: 'idNotFound' }};
-	});
-
-	return response;
+	return res ? { data: { id }} : { error: { code: 'idNotFound' }};
 };
 
 const actions = {
@@ -103,10 +76,16 @@ const actions = {
 	remove,
 };
 
-const store = (context) => {
+const store = async (context) => {
 	const { action } = context;
 
-	return actions[action](context);
+	const result = await tryCatch(async () => {
+		const response = await actions[action](context);
+
+		return response;
+	});
+
+	return result;
 };
 
 export default store;
