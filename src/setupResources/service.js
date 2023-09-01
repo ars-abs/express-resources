@@ -1,8 +1,13 @@
-const service = (context) => {
-	const { store, validate } = context;
-	const { error } = validate(context);
+import { pipeline } from '../helpers';
 
-	return error ? { error } : store(context);
+const service = async (context) => {
+	const { validate, store } = context;
+	const pipes = [validate, store];
+	const process = pipeline(pipes);
+
+	const response = await process(context);
+
+	return response;
 };
 
 export default service;
