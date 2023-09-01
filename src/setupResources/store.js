@@ -8,6 +8,15 @@ const getIncludes = ({ name, resources, models }) => {
 	return map(includes, (modelName) => models[modelName]);
 };
 
+const tryCatch = (fn) => {
+	try {
+		return fn();
+	}
+	catch (error) {
+		return { error };
+	}
+};
+
 const read = async (context) => {
 	const { name, models, config: { resources }, data: { id }} = context;
 	const model = models[name];
