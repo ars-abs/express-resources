@@ -1,22 +1,12 @@
 import { map } from '@laufire/utils/collection';
 import { v4 as getUUID } from 'uuid';
 import { getOptions } from '../helpers/pagination';
+import { tryCatch } from '../helpers';
 
 const getIncludes = ({ name, resources, models }) => {
 	const { includes = [] } = resources[name];
 
 	return map(includes, (modelName) => models[modelName]);
-};
-
-const tryCatch = async (fn) => {
-	try {
-		const res = await fn();
-
-		return res;
-	}
-	catch (error) {
-		return { error: 'unknownError' };
-	}
 };
 
 const read = async (context) => {

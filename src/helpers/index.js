@@ -45,9 +45,21 @@ const pipe = (pipes, data) => reduceSync(
 	pipes, async (acc, c) => merge(await c(acc) || {}, acc), data,
 );
 
+const tryCatch = async (fn) => {
+	try {
+		const res = await fn();
+
+		return res;
+	}
+	catch (error) {
+		return { error: 'unknownError' };
+	}
+};
+
 export {
 	mapAsync,
 	reduceSync,
 	runSteps,
 	pipe,
+	tryCatch,
 };
