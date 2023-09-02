@@ -15,6 +15,7 @@ const mapAsync = async (collection, cb) => {
 	}
 	return ret;
 };
+
 const reduceSync = async (
 	collection, reducer, initial,
 ) => {
@@ -41,6 +42,7 @@ const runSteps = (steps, data) => reduceSync(
 		return acc;
 	}, data
 );
+
 const pipe = (pipes, data) => reduceSync(
 	pipes, async (acc, c) => merge(await c(acc) || {}, acc), data,
 );
