@@ -7,13 +7,25 @@ const validateID = ({ data: { id }}) =>
 const validateQuery = ({ name, meta, validators }) => {
 	const { query: validate } = validators[name];
 
-	return validate(meta) ? {} : { error: { code: 'invalidRequest' }};
+	return validate(meta)
+		? {}
+		: { error: {
+			data: validate.errors[0].params.errors,
+			code: 'invalidRequest',
+			message: validate.errors[0].message,
+		}};
 };
 
 const validateSchema = ({ name, data: { payload }, validators }) => {
 	const { schema: validate } = validators[name];
 
-	return validate(payload) ? {} : { error: { code: 'invalidData' }};
+	return validate(payload)
+		? {}
+		: { error: {
+			data: validate.errors[0].params.errors,
+			code: 'invalidData',
+			message: validate.errors[0].message,
+		}};
 };
 
 const actionValidators = {

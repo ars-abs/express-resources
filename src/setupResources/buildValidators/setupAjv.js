@@ -1,7 +1,10 @@
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
+import errors from 'ajv-errors';
 
-const ajv = new Ajv({ coerceTypes: true });
+const ajv = new Ajv({ coerceTypes: true, allErrors: true });
+
+errors(ajv);
 
 ajv.addFormat('ref', {
 	validate: (data) => typeof data === 'string'
