@@ -1,8 +1,8 @@
 import { pipeline } from '../helpers';
 
 const service = async (context) => {
-	const { validate, store } = context;
-	const pipes = [validate, store];
+	const { log, validate, store } = context;
+	const pipes = [log, validate, store];
 	const process = pipeline(pipes);
 
 	const response = await process(context);
