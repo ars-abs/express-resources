@@ -10,7 +10,7 @@ const validateQuery = ({ name, meta, validators }) => {
 	return validate(meta)
 		? {}
 		: { error: {
-			data: validate.errors[0].params.errors,
+			data: validate.errors,
 			code: 'invalidRequest',
 			message: validate.errors[0].message,
 		}};
@@ -22,7 +22,7 @@ const validateSchema = ({ name, data: { payload }, validators }) => {
 	return validate(payload)
 		? {}
 		: { error: {
-			data: validate.errors[0].params.errors,
+			data: validate.errors,
 			code: 'invalidData',
 			message: validate.errors[0].message,
 		}};
