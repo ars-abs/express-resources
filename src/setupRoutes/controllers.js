@@ -1,6 +1,7 @@
 import { getMeta } from '../helpers/pagination';
 
 // TODO: Handle NOT FOUND and BAD REQUEST properly.
+// TODO: Define I/O structure for service.
 const create = async ({ body: payload, context }, res) => {
 	const action = 'create';
 	const { service, resource: { name }} = context;
