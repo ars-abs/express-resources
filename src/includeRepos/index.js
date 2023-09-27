@@ -1,8 +1,7 @@
-import { map } from '@laufire/utils/collection';
 import repoTypes from './repoTypes';
 
-const includeRepos = ({ config: { repos }}) => ({
-	repos: map(repos, ({ type, ...props }) => repoTypes[type](props)),
+const includeRepos = ({ processRepos }) => ({
+	repos: processRepos(repoTypes),
 });
 
 export default includeRepos;
