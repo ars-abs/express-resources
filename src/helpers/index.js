@@ -54,7 +54,7 @@ const tryCatch = async (fn) => {
 		return res;
 	}
 	catch (error) {
-		return { error: 'unknownError' };
+		return { error };
 	}
 };
 
