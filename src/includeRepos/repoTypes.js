@@ -13,14 +13,25 @@ const repoTypes = {
 		logging: false,
 		...freezeTableName,
 	},),
-	postgres: ({ host, userName, password, dataBase }) => new Sequelize(
+	postgres: ({ userName, password, dataBase, ...rest }) => new Sequelize(
 		dataBase,
 		userName,
 		password,
 		{
-			host: host,
 			dialect: 'postgres',
 			logging: false,
+			...rest,
+			...freezeTableName,
+		},
+	),
+	mysql: ({ userName, password, dataBase, ...rest }) => new Sequelize(
+		dataBase,
+		userName,
+		password,
+		{
+			dialect: 'mysql',
+			logging: false,
+			...rest,
 			...freezeTableName,
 		},
 	),
